@@ -37,7 +37,7 @@ class DisplayCard extends HTMLElement {
   }
   connectedCallback() {
     this.$card = this._shadowRoot.querySelector('div');
-    this.$iframe = this._shadowRoot?.querySelector('iframe');
+    this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$card.style.setProperty('--aspectRatio', this.aspect ?? null);
     // console.log('this.$card', this.$card, this.$iframe)
 
