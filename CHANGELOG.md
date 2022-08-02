@@ -1,3 +1,6 @@
+### Version 0.1.4
+- Bumped version to 0.1.3
+
 ### Version 0.1.3
 
 ### Version 0.1.3
