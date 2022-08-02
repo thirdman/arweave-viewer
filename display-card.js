@@ -40,7 +40,7 @@ export default class ArweaveViewer extends HTMLElement {
     this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
     // console.log('this.$card', this.$card, this.$iframe)
 
-    if (this.content) {
+    if (this.content && !this.hashId) {
       // const url = 'http://arweave.net/LUW9bB3NHQOKr_Wgy8bVXCEViV52nopHA9ASkW4yS8s' //  + this.hashId
       // const url2 = 'http://arweave.net/' + this.hashId
       const parser = new DOMParser();
@@ -57,8 +57,13 @@ export default class ArweaveViewer extends HTMLElement {
       const url2 = 'http://arweave.net/' + this.hashId
       this.$iframe.src = url2;
     }
-    if (this.src && !this.hashId) {
-      this.$iframe.src = this.src;
+    // if (this.src && !this.hashId) {
+    //   this.$iframe.src = this.src;
+    // }
+    if (this.theme) {
+      console.log('theme', this.theme)
+      // this.$card.style.setProperty('--c-c', this.aspect ? this.aspect : null);
+      // this.$iframe.src = this.src;
     }
   }
 
@@ -84,7 +89,8 @@ export default class ArweaveViewer extends HTMLElement {
       'src',
       'id',
       'aspect',
-      'content'
+      'content',
+      'theme'
     ];
   }
   
@@ -137,6 +143,17 @@ export default class ArweaveViewer extends HTMLElement {
   get content() {
     if (this.hasAttribute('content')) {
       return this.getAttribute('content') || undefined;
+    }
+
+    return undefined;
+  }
+  
+  /**
+   * Get the theme.
+   */
+  get theme() {
+    if (this.hasAttribute('theme')) {
+      return this.getAttribute('theme') || undefined;
     }
 
     return undefined;
