@@ -1,3 +1,7 @@
+### Version 0.1.7
+- try new layout
+- add basic theming
+
 ### Version 0.1.6
 - change name
 
