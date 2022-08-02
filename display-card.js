@@ -38,7 +38,7 @@ class DisplayCard extends HTMLElement {
   connectedCallback() {
     this.$card = this._shadowRoot.querySelector('div');
     this.$iframe = this._shadowRoot.querySelector('iframe');
-    this.$card.style.setProperty('--aspectRatio', this.aspect ?? null);
+    this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
     // console.log('this.$card', this.$card, this.$iframe)
 
     if (this.content) {
@@ -46,7 +46,7 @@ class DisplayCard extends HTMLElement {
       // const url2 = 'http://arweave.net/' + this.hashId
       const parser = new DOMParser();
       const doc3 = parser.parseFromString(this.content, "text/html");
-      console.log('doc3', doc3);
+      // console.log('doc3', doc3);
 
       // var html_string = "<html><body><h1>My epic iframe</p></body></html>";
       this.$iframe.srcdoc = this.content;
@@ -55,7 +55,7 @@ class DisplayCard extends HTMLElement {
     }
     if (this.hashId && !this.src) {
       const url = 'http://arweave.net/LUW9bB3NHQOKr_Wgy8bVXCEViV52nopHA9ASkW4yS8s' //  + this.hashId
-      const url2 = 'http://arweave.net/' + this.hashId
+      // const url2 = 'http://arweave.net/' + this.hashId
       this.$iframe.src = url;
     }
     if (this.src && !this.hashId) {
@@ -75,7 +75,7 @@ class DisplayCard extends HTMLElement {
         this.iframe.src = content;
         break;
       case 'aspect':
-        this.$card.style.setProperty('--aspectRatio', this.aspect ?? null);
+        this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
         break;
     }
   }

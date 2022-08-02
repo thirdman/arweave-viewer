@@ -6,6 +6,7 @@
   "license": "MIT",
   "repository": "thirdman/arweave-viewer",
   "main": "display-card.js",
+  "module": "display-card.js",
   "keywords": [
     "arweave",
     "npm",
