@@ -1,16 +1,28 @@
 const template = document.createElement('template');
-
+// padding-top: calc(100% / (var(--aspectRatio)));
+//       position: relative;
 template.innerHTML = `
   <style>
     :host {
       --aspectRatio: 16/9;
     }
+    
     div {
-      padding-top: calc(100% / (var(--aspectRatio)));
       position: relative;
       width: 100%;
       background: pink;
-      object-fit: contain;
+      aspect-ratio: var(--aspectRatio);
+      
+    }
+    div.card{
+      height: 100vh;
+      object-fit: cover;
+      width: 100vw;
+    }
+    div.card svg{
+      width: 100%;
+      height: 100%;
+
     }
     div iframe {
       position: absolute;
@@ -33,11 +45,16 @@ export default class ArweaveViewer extends HTMLElement {
     super();
     this._shadowRoot = this.attachShadow({ 'mode': 'open' });
     this._shadowRoot.appendChild(template.content.cloneNode(true));
+    
   }
   connectedCallback() {
+    
     this.$card = this._shadowRoot.querySelector('div');
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
+    
+
+
     // console.log('this.$card', this.$card, this.$iframe)
 
     if (this.content && !this.hashId) {
@@ -48,7 +65,8 @@ export default class ArweaveViewer extends HTMLElement {
       // console.log('doc3', doc3);
 
       // var html_string = "<html><body><h1>My epic iframe</p></body></html>";
-      this.$iframe.srcdoc = this.content;
+      // this.$iframe.srcdoc = this.content;
+      this.$card.innerHTML = this.content;;
 
       // this.$iframe.src = doc3;
     }
@@ -61,7 +79,47 @@ export default class ArweaveViewer extends HTMLElement {
     //   this.$iframe.src = this.src;
     // }
     if (this.theme) {
-      console.log('theme', this.theme)
+      console.log('theme: ', this.theme)
+      const themeArray = this.theme.split(',');
+      console.log('themeArray', themeArray);
+      const styleStringPrefix = `:host{`
+      const styleStringSuffix = `}`
+      let styleString = ` `
+      themeArray.map((item, index) => {
+        // this.$card.style.setProperty(`--c-c${index+1}`, item);  
+        // this.$card.style.setProperty(`background`, item);  
+        styleString = styleString + `
+          --c-c${index + 1}: ${item};
+          `
+        console.log('item', item)
+      });
+      const compiledStyleString = `
+        ${styleStringPrefix} 
+        ${styleString} 
+        ${styleStringSuffix} 
+        `;
+      console.log('compiledStyleString', compiledStyleString)
+        
+      let styleEl = document.createElement('style');
+      // this.$style = this._shadowRoot.querySelector('style');
+      styleEl.textContent = compiledStyleString
+      this._shadowRoot.appendChild(styleEl);
+      console.log('styleEl', styleEl)
+
+    // `:host{
+    
+    //   --c-c1: #fff;
+    //   --c-c2: #000;
+    //   --c-c3: #000;
+    //   --c-c4: #000;
+    //   --c-c5: #000;
+    //   --c-c6: #000;
+      
+    // }
+    // .cf-c1, .cf-c1 path{
+    //   fill: var(--c-c1);
+    // }`;
+    
       // this.$card.style.setProperty('--c-c', this.aspect ? this.aspect : null);
       // this.$iframe.src = this.src;
     }
@@ -159,4 +217,5 @@ export default class ArweaveViewer extends HTMLElement {
     return undefined;
   }
 }
+
 window.customElements.define('arweave-viewer', ArweaveViewer);
