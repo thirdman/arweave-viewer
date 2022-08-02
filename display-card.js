@@ -1,6 +1,5 @@
 const template = document.createElement('template');
 
-{/* <div class="card-body">ggg</div> */}
 template.innerHTML = `
   <style>
     :host {
@@ -29,7 +28,7 @@ template.innerHTML = `
   </div>
 `
 
-class DisplayCard extends HTMLElement {
+export default class  DisplayCard extends HTMLElement {
   constructor() {
     super();
     this._shadowRoot = this.attachShadow({ 'mode': 'open' });
