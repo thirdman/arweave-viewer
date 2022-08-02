@@ -1,3 +1,6 @@
+### Version 0.1.0
+- change main entry
+
 ### Version 0.0.1
 - initial properties scaffolding
 
