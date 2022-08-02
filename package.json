@@ -5,7 +5,7 @@
   "description": "Display an arweave file",
   "license": "MIT",
   "repository": "thirdman/arweave-viewer",
-  "main": "index.html",
+  "main": "display-card.js",
   "keywords": [
     "arweave",
     "npm",
