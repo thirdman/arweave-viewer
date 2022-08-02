@@ -28,7 +28,7 @@ template.innerHTML = `
   </div>
 `
 
-export default class  DisplayCard extends HTMLElement {
+export default class ArweaveViewer extends HTMLElement {
   constructor() {
     super();
     this._shadowRoot = this.attachShadow({ 'mode': 'open' });
@@ -53,9 +53,9 @@ export default class  DisplayCard extends HTMLElement {
       // this.$iframe.src = doc3;
     }
     if (this.hashId && !this.src) {
-      const url = 'http://arweave.net/LUW9bB3NHQOKr_Wgy8bVXCEViV52nopHA9ASkW4yS8s' //  + this.hashId
-      // const url2 = 'http://arweave.net/' + this.hashId
-      this.$iframe.src = url;
+      //const url = 'http://arweave.net/LUW9bB3NHQOKr_Wgy8bVXCEViV52nopHA9ASkW4yS8s' //  + this.hashId
+      const url2 = 'http://arweave.net/' + this.hashId
+      this.$iframe.src = url2;
     }
     if (this.src && !this.hashId) {
       this.$iframe.src = this.src;
@@ -142,4 +142,4 @@ export default class  DisplayCard extends HTMLElement {
     return undefined;
   }
 }
-window.customElements.define('display-card', DisplayCard);
+window.customElements.define('arweave-viewer', ArweaveViewer);
