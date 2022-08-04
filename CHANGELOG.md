@@ -1,3 +1,5 @@
+### Version 0.1.8
+
 ### Version 0.1.7
 - try new layout
 - add basic theming

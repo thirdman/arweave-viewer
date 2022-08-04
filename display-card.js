@@ -10,14 +10,13 @@ template.innerHTML = `
     div {
       position: relative;
       width: 100%;
-      background: pink;
       aspect-ratio: var(--aspectRatio);
       
     }
     div.card{
-      height: 100vh;
+      height: 100%;
+      width: 100%;
       object-fit: cover;
-      width: 100vw;
     }
     div.card svg{
       width: 100%;
