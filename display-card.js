@@ -68,13 +68,8 @@ export default class ArweaveViewer extends HTMLElement {
       const parser = new DOMParser();
       if (parser) {
         const doc3 = parser.parseFromString(this.content, "text/html");
-        console.log('doc3', doc3);
-  
-        // var html_string = "<html><body><h1>My epic iframe</p></body></html>";
-        // this.$iframe.srcdoc = this.content;
-        
+        // console.log('doc3', doc3);
         this.$card.innerHTML = this.content;
-        
       }
 
       // this.$iframe.src = doc3;
@@ -101,28 +96,17 @@ export default class ArweaveViewer extends HTMLElement {
       }
       // const themeType = theme.substring(0, 3) === 'hsl' ? 'hsl' : 'hex';
       const themeArray = themeType === 'hex' ? theme.split(',') : theme.split('|');
-      console.log('themeArray', themeArray);
-      const styleStringPrefix = `:host{`
-      const styleStringSuffix = `}`
-      let styleString = ` `
-      
-      themeArray.map((item, index) => {
-        // this.$card.style.setProperty(`--c-c${index+1}`, item);  
-        // this.$card.style.setProperty(`background`, item);  
-        styleString = styleString + `--c-c${index + 1}: ${item};
-          `
-        // console.log('item', item)
-      });
-      
-      const compiledStyleString = `
-        ${styleStringPrefix} 
-        ${styleString} 
-        ${styleStringSuffix}
-        `;
-        
+      // console.log('themeArray', themeArray);
+      const compiledHeadString = this.compileHeadString(themeArray);
       let styleEl = document.createElement('style');
-      styleEl.textContent = compiledStyleString
+      styleEl.textContent = compiledHeadString
       this._shadowRoot.appendChild(styleEl);
+      // const compiledClasses = this.compileClasses(themeArray);
+      // let styleEl2 = document.createElement('style');
+      // styleEl2.textContent = compiledClasses
+      // console.log('styleEl2', styleEl2)
+      // this._shadowRoot.appendChild(styleEl2);
+      // console.log('this._shadowRoot', this._shadowRoot)
       
 
     // `:host{
@@ -178,8 +162,6 @@ export default class ArweaveViewer extends HTMLElement {
    * Compiled a theme from a hue value
    */
   compileThemeFromHue(hue) {
-    console.log('compileThemeFromHue')
-    // const hue = this.hue
     const arrayLength = 5
     const minLimit = 10; // sets the darkest range. Ie contrast will be between 10 and 90;
     const maxLimit = 10; // sets the lightest range. Ie contrast will be between 10 and 90;
@@ -195,6 +177,73 @@ export default class ArweaveViewer extends HTMLElement {
     const themeString = theme.join('|');
     console.log('hue', hue, theme)
     return themeString
+  }
+  /**
+   * Compiled the head styles
+   */
+  compileHeadString(array) {
+    const styleStringPrefix = `:host{`
+      const styleStringSuffix = `}`
+      let styleString = ` `
+    let classesString = ` 
+      `
+      
+      array.map((item, index) => {
+        // this.$card.style.setProperty(`--c-c${index+1}`, item);  
+        // this.$card.style.setProperty(`background`, item);  
+        
+        styleString = styleString + `--c-c${index + 1}: ${item};
+        
+          `
+        // console.log('item', item)
+      });
+      array.map((item, index) => {
+        classesString = classesString + `
+        .cs-c${index + 1}{stroke: var(--c-c${index + 1});}
+          `
+        // console.log('item', item)
+      });
+      
+      const compiledStyleString = `
+        ${styleStringPrefix} 
+        ${styleString} 
+        ${styleStringSuffix}
+        ${classesString}
+        `;
+    return compiledStyleString
+  }
+ 
+  /**
+   * Compiled the classes
+   */
+  compileClasses(array) {
+    // let classString = `
+    //   svg{border: 1px solid red;}
+      
+    //   --c-c2: lime;
+    //   .cs-c2{stoke: var(--c-c2);}
+    //   .cs-c3{stoke: var(--c-c3);}
+    //   .cs-c4{stoke: var(--c-c4);}
+    //   .cs-c5{stoke: var(--c-c5);}
+      
+    //   .cf-c1{fill: var(--c-c1);}
+    //   .cf-c2{fill: var(--c-c2);}
+    //   .cf-c3{fill: var(--c-c3);}
+    //   .cf-c4{fill: var(--c-c4);}
+    //   .cf-c5{fill: var(--c-c5);}
+    // `
+    // // .cf-c${index + 1}{fill: var(--c-c${index + 1})};
+    //   array.map((item, index) => {
+    //     classString = classString + `
+      
+    //        --c-c${index + 1}: ${item};
+    //       .cs-c${index + 1}{stroke: var(--c-c1)};
+    //       `
+    //     // console.log('item', item)
+    //   });
+      
+    //   console.log('compileClasses', classString)
+    // return classString
   }
 
   /**
