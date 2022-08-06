@@ -81,7 +81,7 @@ export default class ArweaveViewer extends HTMLElement {
     }
     if (this.hashId && !this.src) {
       //const url = 'http://arweave.net/LUW9bB3NHQOKr_Wgy8bVXCEViV52nopHA9ASkW4yS8s' //  + this.hashId
-      const url2 = 'http://arweave.net/' + this.hashId
+      const url2 = 'https://arweave.net/' + this.hashId
       this.$iframe.src = url2;
     }
     // if (this.src && !this.hashId) {

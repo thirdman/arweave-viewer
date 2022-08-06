@@ -56,7 +56,9 @@
  .theme {
    background: rgba(0, 0, 0, .6);
    color: #eee;
-   display: inline;
+   display: inline-flex;
+   align-self: flex-start;
+   justify-self: flex-start;
    padding: 2px 4px;
    font-family: monospace;
    font-weight: bold;
