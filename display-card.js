@@ -79,7 +79,16 @@ export default class ArweaveViewer extends HTMLElement {
     // }
     if (this.theme) {
       console.log('theme: ', this.theme)
-      const themeArray = this.theme.split(',');
+      console.log('this.theme.substring(0, 3)', this.theme.substring(0, 3));
+      let themeType = 'hex';
+      if (this.theme.substring(0, 3) === 'hsl') {
+        themeType = 'hsl'
+      }
+      if (this.theme.substring(0, 3) === 'rgb') {
+        themeType = 'rgb'
+      }
+      // const themeType = this.theme.substring(0, 3) === 'hsl' ? 'hsl' : 'hex';
+      const themeArray = themeType === 'hex' ? this.theme.split(',') : this.theme.split('|');
       console.log('themeArray', themeArray);
       const styleStringPrefix = `:host{`
       const styleStringSuffix = `}`
@@ -97,13 +106,13 @@ export default class ArweaveViewer extends HTMLElement {
         ${styleString} 
         ${styleStringSuffix} 
         `;
-      console.log('compiledStyleString', compiledStyleString)
+      // console.log('compiledStyleString', compiledStyleString)
         
       let styleEl = document.createElement('style');
       // this.$style = this._shadowRoot.querySelector('style');
       styleEl.textContent = compiledStyleString
       this._shadowRoot.appendChild(styleEl);
-      console.log('styleEl', styleEl)
+      // console.log('styleEl', styleEl)
 
     // `:host{
     
