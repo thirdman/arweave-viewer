@@ -1,3 +1,6 @@
+### Version 0.1.11
+- add no hash theme
+
 ### Version 0.1.10
 - fix docs link
 - iupdate demos.
