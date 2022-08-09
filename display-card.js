@@ -87,15 +87,32 @@ export default class ArweaveViewer extends HTMLElement {
       const theme = this.theme || this.hueTheme;
       console.log('theme', theme)
       console.log('this.theme.substring(0, 3)', theme.substring(0, 3));
-      let themeType = 'hex';
+      let themeType;
+      if (theme.substring(0, 1) === '#') {
+        themeType = 'hex'
+      }
       if (theme.substring(0, 3) === 'hsl') {
         themeType = 'hsl'
       }
       if (theme.substring(0, 3) === 'rgb') {
         themeType = 'rgb'
       }
+      if (!themeType) {
+        console.log('themeType must be hex numbers');
+        themeType = 'hexNumbers'
+      }
+      
       // const themeType = theme.substring(0, 3) === 'hsl' ? 'hsl' : 'hex';
-      const themeArray = themeType === 'hex' ? theme.split(',') : theme.split('|');
+      let themeArray = (themeType === 'hex' || themeType === 'hexNumbers') ? theme.split(',') : theme.split('|');
+      if (themeType === 'hexNumbers') {
+        console.log('themeTYpe hexnumbers add #: ', themeArray)
+        themeArray = themeArray.map(number => {
+          let value = `#${number}`
+          console.log('themeTYpe value', value)
+          return value
+        });
+        console.log('themeTYpe from hexnumbers now', themeArray)
+      }
       // console.log('themeArray', themeArray);
       const compiledHeadString = this.compileHeadString(themeArray);
       let styleEl = document.createElement('style');
