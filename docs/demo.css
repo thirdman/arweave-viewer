@@ -15,9 +15,12 @@
  }
 
  h2 {
-   border-left: .5em solid #111;
-   padding-left: .25em;
-
+   /* border-left: .5em solid #111; */
+   /* padding-left: .25em; */
+   border-left: 0.5em solid violet;
+   background: #222;
+   display: inline-flex;
+   padding: 2px 0.25em;
  }
 
  hr {

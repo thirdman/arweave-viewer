@@ -21,6 +21,28 @@
   <p class="subtitle">.cf-c1, .cf-c2, etc, where 'cf' relates to 'fill', and '-c1' matches the color in the theme array.
   </p>
   <p class="subtitle">similarly, .cs-c1, cs-c2... would related to stroke colors.</p>
+
+  <h2>Usage</h2>
+  <strong>
+    <pre>&lt;areweave-viewer source=&quot;...&quot; theme=&quot;...&quot;&gt;&lt;/areweave-viewer&gt;</pre>
+  </strong>
+
+  <h2>Props</h2>
+  <ul>
+    <li>content: html string to be rendered</li>
+    <li>id (optional): arweave id. Will display as file</li>
+    <li>aspect (optional): aspect ration for displayed element (used with src or id to determine height) eg. 1/1</li>
+    <li>theme (optional): pipe or comma separated array of color values</li>
+    <li>hue (optional): hue value between 0 and 360. This will auto-generate a theme</li>
+  </ul>
+
+  <h2>Themes</h2>
+  <ul>
+    <li>Supply hex (with or without #), rgb, hsl values</li>
+    <li>values must be same type</li>
+    <li>Any number but should match the number of variables assigned in the artwork</li>
+    <li>Will be applied in order. So the first color will be var(--c-c1)</li>
+  </ul>
   <h2>Examples</h2>
   <!-- id='0ac7e275-115a-4e68-b8fb-cb747ecc96a8'
     src='https://www.youtube.com/embed/EqNHSrHzSOU' -->
