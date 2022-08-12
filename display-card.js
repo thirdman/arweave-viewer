@@ -46,15 +46,19 @@ export default class ArweaveViewer extends HTMLElement {
     this._shadowRoot = this.attachShadow({ 'mode': 'open' });
     this._shadowRoot.appendChild(template.content.cloneNode(true));
     this.hueTheme = null
+    this.sourceCode = null
     
   }
   connectedCallback() {
-    
+    this.init();
+  }
+  
+  async init() {
     this.$card = this._shadowRoot.querySelector('div');
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
     
-
+    console.log('connected', this)
 
     // console.log('this.$card', this.$card, this.$iframe)
     if (this.hue && !this.theme) {
@@ -62,17 +66,39 @@ export default class ArweaveViewer extends HTMLElement {
       this.hueTheme = newTheme;
       console.log('newTheme', newTheme, this.hueTheme)
     }
+    if (this.source) {
+      console.log('source:', this.source)
+      
+      const sourceValue = await this.svgFileToString(this.source);
+      console.log('source sourcevalue: ', sourceValue)
+      // this._sourceCode = sourceValue;
+
+      console.log('source now: ', this.sourceCode)
+      
+      // const parser = new DOMParser();
+      // if (parser) {
+        
+      //   const fragment = parser.parseFromString(this.source, "text/html");
+      //   console.log('source: fragment', fragment)
+      //   console.log('source: outerHTML', fragment.outerHTML)
+      //   // var tmp = document.createElement("div");
+      //   // tmp.appendChild(fragment);
+      //   // console.log('source: tmp' , tmp); // <p>Test</p>
+      //   // console.log('source: outerHTML' , tmp.innerHTML); // <p>Test</p>
+
+      //   const s = new XMLSerializer().serializeToString(fragment)
+      //   const encodedData = window.btoa(s);
+      // console.log('source: ',{s, encodedData})
+
+      //   // console.log('doc3', doc3);
+      // }      
+      this.$card.innerHTML = this.sourceCode;
+    }
     if (this.content && !this.hashId) {
       // const url = 'http://arweave.net/LUW9bB3NHQOKr_Wgy8bVXCEViV52nopHA9ASkW4yS8s' //  + this.hashId
       // const url2 = 'http://arweave.net/' + this.hashId
-      const parser = new DOMParser();
-      if (parser) {
-        const doc3 = parser.parseFromString(this.content, "text/html");
-        // console.log('doc3', doc3);
         this.$card.innerHTML = this.content;
-      }
-
-      // this.$iframe.src = doc3;
+      
     }
     if (this.hashId && !this.src) {
       //const url = 'http://arweave.net/LUW9bB3NHQOKr_Wgy8bVXCEViV52nopHA9ASkW4yS8s' //  + this.hashId
@@ -150,6 +176,9 @@ export default class ArweaveViewer extends HTMLElement {
       case 'src':
         this.iframe.src = newValue;
         break;
+      case 'source':
+        // this.iframe.src = newValue;
+        break;
       case 'title':
         this.iframe.title = newValue;
         break;
@@ -168,6 +197,7 @@ export default class ArweaveViewer extends HTMLElement {
   get observedAttributes(){
     return [
       'src',
+      'source',
       'id',
       'aspect',
       'content',
@@ -175,6 +205,24 @@ export default class ArweaveViewer extends HTMLElement {
       'hue',
     ];
   }
+  /**
+   * SVG FILE TO STRING
+   * @param {source} 
+   */
+  svgFileToString(source){
+    const result = fetch(source)
+    .then(response => response.text())
+    .then(text => {
+      console.log('source text: ', text);
+      // do whatever
+      this.sourceCode = text
+      return text
+    }).catch(error => {
+      return error
+    });
+    return result
+}
+
   /**
    * Compiled a theme from a hue value
    */
@@ -274,6 +322,16 @@ export default class ArweaveViewer extends HTMLElement {
     return undefined;
   }
   /**
+   * Get source 
+   */
+  get source(){
+    if (this.hasAttribute('source')) {
+      return this.getAttribute('source') || undefined;
+    }
+
+    return undefined;
+  }
+  /**
    * Get aspect property of the object.
    */
   get aspect(){
@@ -340,3 +398,4 @@ export default class ArweaveViewer extends HTMLElement {
 }
 
 window.customElements.define('arweave-viewer', ArweaveViewer);
+
