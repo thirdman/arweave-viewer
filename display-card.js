@@ -411,12 +411,14 @@ export default class ArweaveViewer extends HTMLElement {
     }
     return undefined;
   }
+
   set hue(value) {
     console.log('set hue', value)
-    if (this.hasAttribute('hue')) {
-      return this.getAttribute('hue') || undefined;
+    if (val) {
+      this.setAttribute('hue', value);
+    } else {
+      this.removeAttribute('hue');
     }
-    return undefined;
   }
   
 }
