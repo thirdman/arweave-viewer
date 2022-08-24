@@ -32,7 +32,6 @@ template.innerHTML = `
     }
   </style>
   <div class="card">
-    <div id="test">meh</div>
     <iframe
       frameborder="0"
       allowfullscreen>
@@ -59,13 +58,9 @@ export default class ArweaveViewer extends HTMLElement {
   async init() {
     this.$card = this._shadowRoot.querySelector('div');
     this.$iframe = this._shadowRoot.querySelector('iframe');
-    this.$test = this._shadowRoot.querySelector('#test');
-    // this.$hue = this.hue;
     
     this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
     
-    console.log('init this.hue', this.$test)
-
     // console.log('this.$card', this.$card, this.$iframe)
     if (this.hue && !this.theme) {
       const newTheme = this.compileThemeFromHue(this.hue)
@@ -176,15 +171,16 @@ export default class ArweaveViewer extends HTMLElement {
       // this.$card.style.setProperty('--c-c', this.aspect ? this.aspect : null);
       // this.$iframe.src = this.src;
     }
-    const tesChild = document.createElement('div')
-      tesChild.innerHTML=`<span>blah ${this.hue}</span>`
-      this.$card.innerHTML = `<span>blah ${this.hue}</span>`
+    // const tesChild = document.createElement('div')
+    //   tesChild.innerHTML=`<span>blah ${this.hue}</span>`
+    //   this.$card.innerHTML = `<span>blah ${this.hue}</span>`
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     console.log('attr changed', name, oldValue, newValue)
     switch (name) {
       case 'uid':
+        console.log('uid changed')
         this.uid = newValue;
         break;
       case 'src':

@@ -505,6 +505,9 @@ g {animation: ar-rotate 5s linear infinite; transform-origin: center center;}
     <input value="123" min="0" max="360" step="1" type="range">
 
   </div>
+  <div>
+    <button id="test123w" onclick="setUid()">test</button>
+  </div>
   <p class="small theme">#096b82,#2f9126,#339ba2,#67cfd5,#aaffcf</p>
 
   <div class="frame">
@@ -812,8 +815,29 @@ fill: var(--c-c5);
         }
       });
 
+      const button = document.getElementById('test123')
+      console.log('button', button);
+      button.onclick = setUid()
 
     })();
+
+    function testIt() {
+      console.log('here')
+    }
+    function setUid() {
+      var S4 = function () {
+        return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+      };
+      const id = (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+      const min = 0
+      const max = 360;
+      const randomNumber = Math.floor(Math.random() * (max - min + 1) + min)
+
+      const example1 = document.querySelector('.hue-example-1')
+      example1.setAttribute('uid', randomNumber)
+
+      // console.log('id', id)
+    }
 
   </script>
 </body>
