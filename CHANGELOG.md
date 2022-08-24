@@ -1,3 +1,6 @@
+### Version 0.1.15
+- Update display-card.js
+
 ### Version 0.1.14
 - track changes
 
