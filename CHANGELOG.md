@@ -1,3 +1,6 @@
+### Version 0.1.16
+- remove test values
+
 ### Version 0.1.15
 - Update display-card.js
 
