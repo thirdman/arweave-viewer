@@ -13,12 +13,12 @@ template.innerHTML = `
       aspect-ratio: var(--aspectRatio);
       
     }
-    div.card{
+    div#card{
       height: 100%;
       width: 100%;
       object-fit: cover;
     }
-    div.card svg{
+    div#card svg{
       width: 100%;
       height: 100%;
 
@@ -31,11 +31,14 @@ template.innerHTML = `
       height: 100% !important;
     }
   </style>
-  <div class="card">
+  <div class="wrapper">
+  <div id="info"></div>
+  <div id="card">
     <iframe
       frameborder="0"
       allowfullscreen>
     </iframe>
+  </div>
   </div>
 `
 
@@ -56,12 +59,20 @@ export default class ArweaveViewer extends HTMLElement {
   }
   
   async init() {
-    this.$card = this._shadowRoot.querySelector('div');
+    this.$card = this._shadowRoot.querySelector('#card');
     this.$iframe = this._shadowRoot.querySelector('iframe');
-    
+    this.$info = this._shadowRoot.querySelector('#info');
+    console.log('this.$info', this.$info);
     this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
     
     // console.log('this.$card', this.$card, this.$iframe)
+    if (this.hue) {
+      this.$info.innerHTML = `<span>hue: ${this.hue}</span>`
+    }
+    if (this.uid) {
+      console.log('this.uid exists', this.uid)
+      this.$info.innerHTML = `<span>hue: ${this.hue}, uid: ${this.uid}</span>`
+    }
     if (this.hue && !this.theme) {
       const newTheme = this.compileThemeFromHue(this.hue)
       this.hueTheme = newTheme;
@@ -415,6 +426,16 @@ export default class ArweaveViewer extends HTMLElement {
     } else {
       this.removeAttribute('hue');
     }
+  }
+
+  /**
+   * Get the UID.
+   */
+  get uid() {
+    if (this.hasAttribute('uid')) {
+      return this.getAttribute('uid') || undefined;
+    }
+    return undefined;
   }
   
 }
