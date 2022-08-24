@@ -500,7 +500,13 @@ g {animation: ar-rotate 5s linear infinite; transform-origin: center center;}
     </div>
   </div>
   <p>rendered as sourcecode</p>
+  <div class="range-slider">
+    <span>from <input type="number" value="123" min="0" max="360" step="1"></span>
+    <input value="123" min="0" max="360" step="1" type="range">
+
+  </div>
   <p class="small theme">#096b82,#2f9126,#339ba2,#67cfd5,#aaffcf</p>
+
   <div class="frame">
     <arweave-viewer theme="#096b82,#2f9126,#339ba2,#67cfd5,#aaffcf" content='<html xmlns="http://www.w3.org/1999/xhtml" style="&#xA;      --c-c1: #cccccc;&#xA;      --c-c2: #aaaaaa;&#xA;      --c-c3: #999999;&#xA;      --c-c4: #666666;&#xA;      --c-c5: #333333;&#xA;      "><head>
 <link xmlns=""/></head><body class="yesvg-body">
@@ -563,7 +569,7 @@ fill: var(--c-c5);
     <div class="col">
       <p class="small theme">hue="50"</p>
       <div class="frame">
-        <arweave-viewer hue="50" content='<html xmlns="http://www.w3.org/1999/xhtml" style="&#xA;      --c-c1: #cccccc;&#xA;      --c-c2: #aaaaaa;&#xA;      --c-c3: #999999;&#xA;      --c-c4: #666666;&#xA;      --c-c5: #333333;&#xA;      "><head>
+        <arweave-viewer class="hue-example-1" hue="50" content='<html xmlns="http://www.w3.org/1999/xhtml" style="&#xA;      --c-c1: #cccccc;&#xA;      --c-c2: #aaaaaa;&#xA;      --c-c3: #999999;&#xA;      --c-c4: #666666;&#xA;      --c-c5: #333333;&#xA;      "><head>
 <link xmlns=""/></head><body class="yesvg-body">
 
 
@@ -684,6 +690,7 @@ fill: var(--c-c5);
     <div class="col">
       <p class="small theme">hue="360"</p>
       <div class="frame">
+
         <arweave-viewer hue="360" content='<html xmlns="http://www.w3.org/1999/xhtml" style="&#xA;      --c-c1: #cccccc;&#xA;      --c-c2: #aaaaaa;&#xA;      --c-c3: #999999;&#xA;      --c-c4: #666666;&#xA;      --c-c5: #333333;&#xA;      "><head>
 <link xmlns=""/></head><body class="yesvg-body">
 
@@ -754,6 +761,60 @@ fill: var(--c-c5);
   </div>
 
   <script src=' ../display-card.js' type="module">
+  </script>
+  <script>
+    (function () {
+      console.log('mounted', this)
+      const example1 = document.querySelector('.hue-example-1')
+      example1.setAttribute('hue', 100)
+      console.log('example1', example1)
+      let hueValue = 123
+      let localWindow = window
+      const parent = document.querySelector('.range-slider');
+
+      if (!parent) {
+        return;
+      }
+
+      const rangeS = parent.querySelectorAll('input[type="range"]'),
+        numberS = parent.querySelectorAll('input[type="number"]');
+
+
+
+      rangeS.forEach((el) => {
+
+        el.oninput = () => {
+          let slide1 = parseFloat(rangeS[0].value);
+          // console.log('slide1', slide1)
+
+
+
+          numberS[0].value = slide1;
+          hueValue = slide1;
+          localWindow.hueValue = hueValue;
+          const example1 = document.querySelector('.hue-example-1')
+          example1.setAttribute('hue', hueValue)
+          const hueAttribute = example1.getAttribute('hue');
+          // console.log('example1', hueAttribute)
+          // console.log('localWindow', hueValue, localWindow.hueValue)
+
+        }
+      });
+
+      numberS.forEach((el) => {
+        el.oninput = () => {
+          let number1 = parseFloat(numberS[0].value);
+
+          rangeS[0].value = number1;
+          hueValue = number1;
+          localWindow.hueValue = number1;
+          console.log('localwindow', localWindow.hueValue)
+        }
+      });
+
+
+    })();
+
   </script>
 </body>
 

@@ -32,6 +32,7 @@ template.innerHTML = `
     }
   </style>
   <div class="card">
+    <div id="test">meh</div>
     <iframe
       frameborder="0"
       allowfullscreen>
@@ -47,18 +48,23 @@ export default class ArweaveViewer extends HTMLElement {
     this._shadowRoot.appendChild(template.content.cloneNode(true));
     this.hueTheme = null
     this.sourceCode = null
-    
+    console.log('constructor this.hue', this.hue); 
   }
   connectedCallback() {
     this.init();
+    
+    console.log('connectedCallback', this.hue); // <= ['bar']
   }
   
   async init() {
     this.$card = this._shadowRoot.querySelector('div');
     this.$iframe = this._shadowRoot.querySelector('iframe');
+    this.$test = this._shadowRoot.querySelector('#test');
+    // this.$hue = this.hue;
+    
     this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
     
-    console.log('connected', this)
+    console.log('init this.hue', this.$test)
 
     // console.log('this.$card', this.$card, this.$iframe)
     if (this.hue && !this.theme) {
@@ -67,13 +73,13 @@ export default class ArweaveViewer extends HTMLElement {
       console.log('newTheme', newTheme, this.hueTheme)
     }
     if (this.source) {
-      console.log('source:', this.source)
+      // console.log('source:', this.source)
       
       const sourceValue = await this.svgFileToString(this.source);
-      console.log('source sourcevalue: ', sourceValue)
+      // console.log('source sourcevalue: ', sourceValue)
       // this._sourceCode = sourceValue;
 
-      console.log('source now: ', this.sourceCode)
+      // console.log('source now: ', this.sourceCode)
       
       // const parser = new DOMParser();
       // if (parser) {
@@ -93,6 +99,7 @@ export default class ArweaveViewer extends HTMLElement {
       //   // console.log('doc3', doc3);
       // }      
       this.$card.innerHTML = this.sourceCode;
+      
     }
     if (this.content && !this.hashId) {
       // const url = 'http://arweave.net/LUW9bB3NHQOKr_Wgy8bVXCEViV52nopHA9ASkW4yS8s' //  + this.hashId
@@ -109,10 +116,10 @@ export default class ArweaveViewer extends HTMLElement {
     //   this.$iframe.src = this.src;
     // }
     if (this.theme || this.hueTheme) {
-      console.log('theme: ', this.theme)
+      // console.log('theme: ', this.theme)
       const theme = this.theme || this.hueTheme;
-      console.log('theme', theme)
-      console.log('this.theme.substring(0, 3)', theme.substring(0, 3));
+      // console.log('theme', theme)
+      // console.log('this.theme.substring(0, 3)', theme.substring(0, 3));
       let themeType;
       if (theme.substring(0, 1) === '#') {
         themeType = 'hex'
@@ -169,10 +176,17 @@ export default class ArweaveViewer extends HTMLElement {
       // this.$card.style.setProperty('--c-c', this.aspect ? this.aspect : null);
       // this.$iframe.src = this.src;
     }
+    const tesChild = document.createElement('div')
+      tesChild.innerHTML=`<span>blah ${this.hue}</span>`
+      this.$card.innerHTML = `<span>blah ${this.hue}</span>`
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
+    console.log('attr changed', name, oldValue, newValue)
     switch (name) {
+      case 'uid':
+        this.uid = newValue;
+        break;
       case 'src':
         this.iframe.src = newValue;
         break;
@@ -184,6 +198,7 @@ export default class ArweaveViewer extends HTMLElement {
         break;
       case 'hue':
         // this.iframe.hue = newValue;
+        console.log('this.hue was changed', this.hue)
         break;
       case 'content':
         this.iframe.src = content;
@@ -199,6 +214,7 @@ export default class ArweaveViewer extends HTMLElement {
       'src',
       'source',
       'id',
+      'uid',
       'aspect',
       'content',
       'theme',
@@ -395,6 +411,14 @@ export default class ArweaveViewer extends HTMLElement {
     }
     return undefined;
   }
+  set hue(value) {
+    console.log('set hue', value)
+    if (this.hasAttribute('hue')) {
+      return this.getAttribute('hue') || undefined;
+    }
+    return undefined;
+  }
+  
 }
 
 window.customElements.define('arweave-viewer', ArweaveViewer);
