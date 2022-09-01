@@ -4,7 +4,7 @@ const template = document.createElement('template');
 template.innerHTML = `
   <style>
     :host {
-      --aspectRatio: 16/9;
+      --aspectRatio: 1/1;
     }
     
     div {

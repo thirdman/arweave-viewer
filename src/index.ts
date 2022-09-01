@@ -1,7 +1,7 @@
 const templateHTML = `
   <style>
     :host {
-      --aspectRatio: 16/9;
+      --aspectRatio: 1/1;
     }
     div {
       padding-top: calc(100% / (var(--aspectRatio)));
