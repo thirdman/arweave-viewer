@@ -142,7 +142,8 @@ export default class ArweaveViewer extends HTMLElement {
       }
       
       // const themeType = theme.substring(0, 3) === 'hsl' ? 'hsl' : 'hex';
-      let themeArray = (themeType === 'hex' || themeType === 'hexNumbers') ? theme.split(',') : theme.split('|');
+      // let themeArray = (themeType === 'hex' || themeType === 'hexNumbers') ? theme.split(',') : theme.split('|');
+      let themeArray = theme.split('|');
       if (themeType === 'hexNumbers') {
         console.log('themeTYpe hexnumbers add #: ', themeArray)
         themeArray = themeArray.map(number => {
