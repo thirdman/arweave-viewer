@@ -1,3 +1,6 @@
+### Version 0.1.18
+- change aspect
+
 ### Version 0.1.17
 - Update display-card.js
 - refactor to use pipes
