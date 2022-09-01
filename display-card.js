@@ -1,22 +1,20 @@
 const template = document.createElement('template');
-// padding-top: calc(100% / (var(--aspectRatio)));
-//       position: relative;
+const devMode = false,
 template.innerHTML = `
   <style>
     :host {
       --aspectRatio: 1/1;
     }
     
-    div {
+    div#info {
       position: relative;
-      width: 100%;
-      aspect-ratio: var(--aspectRatio);
-      
+      width: 100%;      
     }
     div#card{
       height: 100%;
       width: 100%;
       object-fit: cover;
+      aspect-ratio: var(--aspectRatio);
     }
     div#card svg{
       width: 100%;
@@ -62,14 +60,17 @@ export default class ArweaveViewer extends HTMLElement {
     this.$card = this._shadowRoot.querySelector('#card');
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$info = this._shadowRoot.querySelector('#info');
+    if (!devMode) {
+      this.$info.remove()
+    }
     console.log('this.$info', this.$info);
     this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
     
     // console.log('this.$card', this.$card, this.$iframe)
-    if (this.hue) {
+    if (this.hue && this.$info) {
       this.$info.innerHTML = `<span>hue: ${this.hue}</span>`
     }
-    if (this.uid) {
+    if (this.uid && this.$info) {
       console.log('this.uid exists', this.uid)
       this.$info.innerHTML = `<span>hue: ${this.hue}, uid: ${this.uid}</span>`
     }

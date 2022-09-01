@@ -3,7 +3,7 @@ const templateHTML = `
     :host {
       --aspectRatio: 1/1;
     }
-    div {
+    div#info {
       padding-top: calc(100% / (var(--aspectRatio)));
       position: relative;
       width: 100%;
