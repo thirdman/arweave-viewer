@@ -1,5 +1,5 @@
 const template = document.createElement('template');
-const devMode = false,
+const devMode = false;
 template.innerHTML = `
   <style>
     :host {
