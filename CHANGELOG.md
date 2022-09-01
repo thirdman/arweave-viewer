@@ -1,3 +1,8 @@
+### Version 0.1.17
+- Update display-card.js
+- refactor to use pipes
+- refactor docs
+
 ### Version 0.1.16
 - remove test values
 
