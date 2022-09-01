@@ -1,3 +1,6 @@
+### Version 0.1.19
+- add devmode
+
 ### Version 0.1.18
 - change aspect
 
