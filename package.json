@@ -10,5 +10,8 @@
     "arweave",
     "npm",
     "package"
-  ]
+  ],
+  "scripts": {
+    "dev": "http-server -p 8080"
+  }
 }
