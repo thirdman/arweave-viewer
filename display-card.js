@@ -61,8 +61,8 @@ export default class ArweaveViewer extends HTMLElement {
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$info = this._shadowRoot.querySelector('#info');
 
-    this.svgId = this.$card && this.$card?.firstChild?.id;
-    console.log('this.svgId', this.svgId)
+    this.svgId = this.$card && this.$card.firstChild && this.$card.firstChild.id;
+    // console.log('this.svgId', this.svgId)
     if (!devMode) {
       this.$info.remove()
     }
@@ -102,8 +102,7 @@ export default class ArweaveViewer extends HTMLElement {
       //   // console.log('doc3', doc3);
       // }      
       this.$card.innerHTML = this.sourceCode;
-      console.log('this.$card', this.$card)
-      console.log('this.card.firstChild', this.$card.firstChild)
+      
       const firstChild = this.$card && this.$card.firstChild;
       const svgId = firstChild.id
       console.log('this.card.firstChild.id', svgId)
@@ -170,7 +169,7 @@ export default class ArweaveViewer extends HTMLElement {
       styleEl.textContent = compiledHeadString
       this._shadowRoot.appendChild(styleEl);
       // ADD TO ELEMENT STYLES IN CASE EXISTING NEED TO BE OVERRIDEN
-      const elementEl = this.$card?.firstChild
+      const elementEl = this.$card && this.$card.firstChild
       if (elementEl) {
         const styleEl = elementEl.style || document.createElement('style');
         const tempStyle = styleEl ? elementEl.getAttribute('style') : ''
