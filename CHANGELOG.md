@@ -1,3 +1,6 @@
+### Version 0.1.22
+- remove missing reference
+
 ### Version 0.1.21
 - allow appending style
 
