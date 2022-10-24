@@ -1,3 +1,6 @@
+### Version 0.1.21
+- allow appending style
+
 ### Version 0.1.20
 - fix
 
