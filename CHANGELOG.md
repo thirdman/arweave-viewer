@@ -1,3 +1,6 @@
+### Version 0.1.23
+- add speed and intensity attribute
+
 ### Version 0.1.22
 - remove missing reference
 
