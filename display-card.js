@@ -52,7 +52,6 @@ export default class ArweaveViewer extends HTMLElement {
   }
   connectedCallback() {
     this.init();
-    
     console.log('connectedCallback', this.hue); // <= ['bar']
   }
   
@@ -61,7 +60,9 @@ export default class ArweaveViewer extends HTMLElement {
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$info = this._shadowRoot.querySelector('#info');
 
+    this.speed = this.getAttribute('speed');
     this.svgId = this.$card && this.$card.firstChild && this.$card.firstChild.id;
+    
     // console.log('this.svgId', this.svgId)
     if (!devMode) {
       this.$info.remove()
@@ -211,6 +212,9 @@ export default class ArweaveViewer extends HTMLElement {
       case 'aspect':
         this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
         break;
+      case 'speed':
+        this.$card.style.setProperty('--prmnt-speed', this.speed ? this.speed : null);
+        break;
     }
   }
 
@@ -224,6 +228,7 @@ export default class ArweaveViewer extends HTMLElement {
       'content',
       'theme',
       'hue',
+      'speed'
     ];
   }
   /**
@@ -302,29 +307,31 @@ export default class ArweaveViewer extends HTMLElement {
    * Compiled the element styles
    */
   compileElementString(array, id) {
+    const speed = this.getAttribute('speed')
+    const intensity = this.getAttribute('intensity')
+    console.log('compile, speed: ', speed)
     const styleStringPrefix = ``
-      const styleStringSuffix = `}`
-      let styleString = ` `
-    let classesString = ` 
-      `
+    const styleStringSuffix = ``
+    let styleString = ` `
+      array.map((item, index) => {
+        styleString = styleString + `
+--c-c${index + 1}: ${item};`
+      });
+    if (speed) {
+      styleString = styleString + `
+--prmnt-speed: ${speed};`;
+    }
+    if (intensity) {
+      styleString = styleString + `
+--prmnt-intensity: ${intensity};`;
+    }
       
-      array.map((item, index) => {
-        styleString = styleString + `--c-c${index + 1}: ${item};
-          `
-        // console.log('item', item)
-      });
-      array.map((item, index) => {
-        classesString = classesString + `
-        .cs-c${index + 1}{stroke: var(--c-c${index + 1});}
-          `
-        // console.log('item', item)
-      });
       
       const compiledElementStyleString = `
         ${styleStringPrefix} 
         ${styleString} 
         ${styleStringSuffix}
-        ${classesString}
+        
         `;
     console.log('compiledElementStyleString', compiledElementStyleString)
     return compiledElementStyleString
@@ -458,13 +465,48 @@ export default class ArweaveViewer extends HTMLElement {
   }
 
   /**
-   * Get the UID.
+   * UID.
    */
   get uid() {
     if (this.hasAttribute('uid')) {
       return this.getAttribute('uid') || undefined;
     }
     return undefined;
+  }
+
+  /**
+   * SPEED
+   */
+  get speed() {
+    if (this.hasAttribute('speed')) {
+      return this.getAttribute('speed') || undefined;
+    }
+    return undefined;
+  }
+
+  set speed(value) {
+    if (value) {
+      this.setAttribute('speed', value);
+    } else {
+      this.removeAttribute('speed');
+    }
+  }
+  /**
+   * INTENSITY
+   */
+  get intensity() {
+    if (this.hasAttribute('intensity')) {
+      return this.getAttribute('intensity') || undefined;
+    }
+    return undefined;
+  }
+
+  set intensity(value) {
+    if (value) {
+      this.setAttribute('intensity', value);
+    } else {
+      this.removeAttribute('intensity');
+    }
   }
   
 }
