@@ -173,7 +173,7 @@ export default class ArweaveViewer extends HTMLElement {
       const elementEl = this.$card && this.$card.firstChild
       if (elementEl) {
         const styleEl = elementEl.style || document.createElement('style');
-        const tempStyle = styleEl && elementEl && elementEl.getAttribute &&  elementEl.getAttribute('style') : ''
+        const tempStyle = styleEl && elementEl && elementEl.getAttribute && elementEl.getAttribute('style') || '';
         const appendedStyle = ` ${tempStyle}  ${compiledElementString}`
         elementEl.setAttribute('style', appendedStyle);
       }
