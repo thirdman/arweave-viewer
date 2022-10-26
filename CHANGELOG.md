@@ -1,3 +1,6 @@
+### Version 0.1.24
+- Update display-card.js
+
 ### Version 0.1.23
 - add speed and intensity attribute
 
