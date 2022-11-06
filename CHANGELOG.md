@@ -1,3 +1,7 @@
+### Version 0.1.26
+- add index styling
+- Added property duration
+
 ### Version 0.1.25
 - bug fix
 
