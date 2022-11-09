@@ -232,7 +232,7 @@ export default class ArweaveViewer extends HTMLElement {
         console.log('this.hue was changed', this.hue)
         break;
       case 'content':
-        this.iframe.src = content;
+        this.iframe.src = this.content;
         break;
       case 'aspect':
         if (this.$card) {
