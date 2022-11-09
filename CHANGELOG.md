@@ -1,3 +1,6 @@
+### Version 0.1.27
+- update attribute response
+
 ### Version 0.1.26
 - add index styling
 - Added property duration
