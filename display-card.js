@@ -50,31 +50,52 @@ export default class ArweaveViewer extends HTMLElement {
     this.sourceCode = null
     console.log('constructor this.hue', this.hue); 
   }
-  connectedCallback() {
-    this.init();
-    console.log('connectedCallback', this.hue); // <= ['bar']
-  }
   
+
+  connectedCallback() {
+    console.log('connectedCallback', this.hue); // <= ['bar']
+    this.init();
+  }
+  static get observedAttributes(){
+    return [
+      'src',
+      'source',
+      'id',
+      'uid',
+      'aspect',
+      'content',
+      'theme',
+      'hue',
+      'speed',
+      'duration',
+      'intensity',
+      'progress'
+    ];
+  }
   async init() {
     this.$card = this._shadowRoot.querySelector('#card');
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$info = this._shadowRoot.querySelector('#info');
 
-    this.speed = this.getAttribute('speed');
-    this.svgId = this.$card && this.$card.firstChild && this.$card.firstChild.id;
+    console.log('init', this);
+    
+    // this.speed = this.getAttribute('speed');
     
     // console.log('this.svgId', this.svgId)
     if (!devMode) {
-      this.$info.remove()
+      this.$info && this.$info.remove()
     }
-    console.log('this.$info', this.$info);
-    this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
+    if (this.$card) {
+      this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
+      this.svgId = this.$card.firstChild && this.$card.firstChild.id;
+    }
     
     if (this.hue && this.$info) {
       this.$info.innerHTML = `<span>hue: ${this.hue}</span>`
     }
     if (this.uid && this.$info) {
       console.log('this.uid exists', this.uid)
+      console.log('this.$info exists', this.$info)
       this.$info.innerHTML = `<span>hue: ${this.hue}, uid: ${this.uid}</span>`
     }
     
@@ -203,39 +224,61 @@ export default class ArweaveViewer extends HTMLElement {
         this.iframe.title = newValue;
         break;
       case 'hue':
-        // this.iframe.hue = newValue;
-        this.$card.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
+        
+        if (this.$card) {
+          const el = this.$card.firstChild
+          el.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
+        }
         console.log('this.hue was changed', this.hue)
         break;
       case 'content':
         this.iframe.src = content;
         break;
       case 'aspect':
-        this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
+        if (this.$card) {
+         this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
+        }
         break;
       case 'speed':
-        this.$card.style.setProperty('--prmnt-speed', this.speed ? this.speed : null);
+        if (this.$card) {
+          const el = this.$card.firstChild
+          el.style.setProperty('--prmnt-speed', this.speed ? this.speed : null);
+        }
+        break;
+      case 'theme':
+        if (this.$card) {
+          const el = this.$card.firstChild
+          el.style.setProperty('--prmnt-theme', this.theme ? this.theme : null);
+        }
+        break;
+      case 'intensity':
+        if (this.$card) {
+          const el = this.$card.firstChild
+          el.style.setProperty('--prmnt-intensity', this.intensity ? this.intensity : null);
+        }
         break;
       case 'duration':
-        this.$card.style.setProperty('--prmnt-duration', this.duration ? this.duration : null);
+        if (this.$card) {
+        // console.log('this.svgId', this.svgId)
+          // console.log('this.$card.firstChild', this.$card.firstChild)
+          const el = this.$card.firstChild
+          el.style.setProperty('--prmnt-duration', this.duration ? this.duration : null);
+        //   el.style.setProperty('--prmnt-test', '1234');
+        //   el.style.setProperty('border', '10px solid red');
+        //  this.$card.style.setProperty('--prmnt-duration', this.duration ? this.duration : null);
+        }
+        break;
+      case 'progress':
+        if (this.$card) {
+          const el = this.$card.firstChild
+          el.style.setProperty('--prmnt-progress', this.progress ? this.progress : null);
+        }
         break;
     }
   }
 
-  get observedAttributes(){
-    return [
-      'src',
-      'source',
-      'id',
-      'uid',
-      'aspect',
-      'content',
-      'theme',
-      'hue',
-      'speed',
-      'duration'
-    ];
-  }
+
+  
   /**
    * SVG FILE TO STRING
    * @param {source} 

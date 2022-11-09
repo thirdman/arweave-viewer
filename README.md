@@ -3,4 +3,5 @@
 ![NPM](https://img.shields.io/npm/l/arweave-viewer)
 
 # arweave-viewer
-Web Component to display arweave content
+Web Component to display arweave content.
+run `http-server` to view docs
