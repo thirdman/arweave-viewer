@@ -206,6 +206,8 @@ export default class ArweaveViewer extends HTMLElement {
         if (this.$card) {
           const el = this.$card.firstChild
           el.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
+          const newTheme = this.compileThemeFromHue(this.hue)
+          this.hueTheme = newTheme;
         }
         break;
       case 'aspect':
