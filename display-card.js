@@ -171,14 +171,14 @@ export default class ArweaveViewer extends HTMLElement {
         this.uid = newValue;
         break;
       case 'src':
-        this.iframe.src = newValue;
+        this.$iframe && this.$iframe.src = newValue;
         break;
       case 'source':
         console.warn('source changed: UNHANDLED')
         // this.iframe.src = newValue;
         break;
       case 'title':
-        this.iframe.title = newValue;
+        this.$iframe && this.$iframe.title = newValue;
         break;
       case 'hue':
         if (this.$card) {
@@ -187,7 +187,7 @@ export default class ArweaveViewer extends HTMLElement {
         }
         break;
       case 'content':
-        this.iframe.src = this.content;
+        this.$iframe && this.$iframe.src = this.content;
         break;
       case 'aspect':
         if (this.$card) {
