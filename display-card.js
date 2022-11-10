@@ -102,9 +102,13 @@ export default class ArweaveViewer extends HTMLElement {
      */
     if (this.source) {
       this.$card.innerHTML = this.sourceCode;
-      const firstChild = this.$card && this.$card.firstChild;
-      const svgId = firstChild.id
-      this.svgId = svgId;
+      if (this.$card) {
+        const firstChild = this.$card.firstChild;
+        if (firstChild) {
+          //  const svgId = firstChild.id
+          this.svgId = firstChild.id;
+        }
+      }
     }
     if (this.content && !this.hashId) {
       this.$card.innerHTML = this.content;
@@ -314,6 +318,7 @@ export default class ArweaveViewer extends HTMLElement {
     const intensity = this.getAttribute('intensity')
     const duration = this.getAttribute('duration')
     const hue = this.getAttribute('hue')
+    const theme = this.getAttribute('theme')
     
     const styleStringPrefix = ``
     const styleStringSuffix = ``
