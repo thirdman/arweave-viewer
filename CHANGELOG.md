@@ -1,3 +1,6 @@
+### Version 0.1.29
+- Clean up error messaging
+
 ### Version 0.1.28
 - fix content attribute bug
 
