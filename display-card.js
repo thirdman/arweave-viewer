@@ -187,7 +187,9 @@ export default class ArweaveViewer extends HTMLElement {
         }
         break;
       case 'content':
-        this.$iframe && this.$iframe.src = this.content;
+        if (this.$iframe) {
+          this.$iframe.src = this.content;
+        }
         break;
       case 'aspect':
         if (this.$card) {
