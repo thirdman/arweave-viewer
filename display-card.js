@@ -205,9 +205,18 @@ export default class ArweaveViewer extends HTMLElement {
       case 'hue':
         if (this.$card) {
           const el = this.$card.firstChild
+          // console.log(':: VIEWER hue Changed', this.hue)
           el.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
           const newTheme = this.compileThemeFromHue(this.hue)
           this.hueTheme = newTheme;
+          // console.log('::VIEWER newTheme', newTheme);
+          let themeArray = newTheme.split('|');
+          const elementEl = this.$card.firstChild
+          if (elementEl && themeArray.length ) {
+            themeArray.map((color, index) => {
+              elementEl.style.setProperty(`--c-c${index + 1}`, color);
+            })
+          }
         }
         break;
       case 'aspect':
@@ -286,7 +295,7 @@ export default class ArweaveViewer extends HTMLElement {
       return value
     })
     const themeString = theme.join('|');
-    console.log('hue', hue, theme)
+    // console.log('::VIEWER compileThemeFromHue', hue, theme)
     return themeString
   }
   /**
