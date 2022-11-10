@@ -1,3 +1,6 @@
+### Version 0.1.30
+- Fix iframe bug
+
 ### Version 0.1.29
 - Clean up error messaging
 
