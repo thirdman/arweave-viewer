@@ -171,24 +171,28 @@ export default class ArweaveViewer extends HTMLElement {
         this.uid = newValue;
         break;
       case 'src':
-        this.$iframe && this.$iframe.src = newValue;
+        if (this.$iframe) {
+          this.$iframe.src = newValue;
+        }
         break;
       case 'source':
         console.warn('source changed: UNHANDLED')
         // this.iframe.src = newValue;
         break;
       case 'title':
-        this.$iframe && this.$iframe.title = newValue;
-        break;
-      case 'hue':
-        if (this.$card) {
-          const el = this.$card.firstChild
-          el.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
+        if (this.$iframe) {
+          this.$iframe.title = newValue;
         }
         break;
       case 'content':
         if (this.$iframe) {
           this.$iframe.src = this.content;
+        }
+        break;
+      case 'hue':
+        if (this.$card) {
+          const el = this.$card.firstChild
+          el.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
         }
         break;
       case 'aspect':
