@@ -1,3 +1,6 @@
+### Version 0.1.36
+- update hue theme copmile
+
 ### Version 0.1.35
 - Apply correct css variables
 
