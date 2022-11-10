@@ -1,3 +1,6 @@
+### Version 0.1.28
+- fix content attribute bug
+
 ### Version 0.1.27
 - update attribute response
 

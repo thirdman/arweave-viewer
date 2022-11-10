@@ -48,12 +48,11 @@ export default class ArweaveViewer extends HTMLElement {
     this._shadowRoot.appendChild(template.content.cloneNode(true));
     this.hueTheme = null
     this.sourceCode = null
-    console.log('constructor this.hue', this.hue); 
   }
   
 
   connectedCallback() {
-    console.log('connectedCallback', this.hue); // <= ['bar']
+    // console.log('connectedCallback', this.hue); // <= ['bar']
     this.init();
   }
   static get observedAttributes(){
@@ -77,7 +76,7 @@ export default class ArweaveViewer extends HTMLElement {
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$info = this._shadowRoot.querySelector('#info');
 
-    console.log('init', this);
+    console.log('::VIEWER init: ', this);
     
     // this.speed = this.getAttribute('speed');
     
@@ -94,8 +93,8 @@ export default class ArweaveViewer extends HTMLElement {
       this.$info.innerHTML = `<span>hue: ${this.hue}</span>`
     }
     if (this.uid && this.$info) {
-      console.log('this.uid exists', this.uid)
-      console.log('this.$info exists', this.$info)
+      // console.log('this.uid exists', this.uid)
+      // console.log('this.$info exists', this.$info)
       this.$info.innerHTML = `<span>hue: ${this.hue}, uid: ${this.uid}</span>`
     }
     
@@ -127,7 +126,7 @@ export default class ArweaveViewer extends HTMLElement {
       
       const firstChild = this.$card && this.$card.firstChild;
       const svgId = firstChild.id
-      console.log('this.card.firstChild.id', svgId)
+      // console.log('this.card.firstChild.id', svgId)
       this.svgId = svgId;
       
     }
@@ -149,10 +148,10 @@ export default class ArweaveViewer extends HTMLElement {
     if (this.hue && !this.theme) {
       const newTheme = this.compileThemeFromHue(this.hue)
       this.hueTheme = newTheme;
-      console.log('newTheme', newTheme, this.hueTheme)
+      console.log('::VIEWER newTheme', newTheme, this.hueTheme, 'color: lime;')
     }
     if (this.theme || this.hueTheme) {
-      console.log('theme: ', this.theme)
+      // console.log('theme: ', this.theme)
       const theme = this.theme || this.hueTheme;
       // console.log('theme', theme)
       // console.log('this.theme.substring(0, 3)', theme.substring(0, 3));
@@ -181,10 +180,10 @@ export default class ArweaveViewer extends HTMLElement {
         });
         // console.log('themeTYpe from hexnumbers now', themeArray)
       }
-      console.log('themeArray', themeArray);
+      // console.log('themeArray', themeArray);
       
-      console.log('check for svgId', this.svgId)
-      console.log('check for this.compileElementString', this.compileElementString)
+      // console.log('check for svgId', this.svgId)
+      // console.log('check for this.compileElementString', this.compileElementString)
       const compiledHeadString = this.compileHeadString(themeArray, 'test1234');
       const compiledElementString = this.compileElementString(themeArray, 'test1234');
       let styleEl = document.createElement('style');
@@ -208,7 +207,7 @@ export default class ArweaveViewer extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log('::VIEWER attr changed', name, oldValue, newValue)
+    console.log('::VIEWER attr changed', {name, oldValue, newValue })
     switch (name) {
       case 'uid':
         console.log('uid changed')
@@ -229,7 +228,8 @@ export default class ArweaveViewer extends HTMLElement {
           const el = this.$card.firstChild
           el.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
         }
-        console.log('this.hue was changed', this.hue)
+        
+        
         break;
       case 'content':
         this.iframe.src = this.content;
