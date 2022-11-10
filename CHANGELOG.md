@@ -1,3 +1,6 @@
+### Version 0.1.35
+- Apply correct css variables
+
 ### Version 0.1.34
 - Fix source code bug
 
