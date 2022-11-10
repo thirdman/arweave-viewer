@@ -100,13 +100,22 @@ export default class ArweaveViewer extends HTMLElement {
     /**
      * SOURCES>...
      */
+    if (this.src) {
+      console.log('this.src', this.src)
+    }
     if (this.source) {
-      this.$card.innerHTML = this.sourceCode;
-      if (this.$card) {
-        const firstChild = this.$card.firstChild;
-        if (firstChild) {
-          //  const svgId = firstChild.id
-          this.svgId = firstChild.id;
+      // console.log('this.source exists', this.source)
+      const sourceValue = await this.svgFileToString(this.source);
+      if (sourceValue) {
+        this.sourceCode = sourceValue;
+        
+        if (this.$card) {
+          this.$card.innerHTML = this.sourceCode;
+          const firstChild = this.$card.firstChild;
+          if (firstChild) {
+            //  const svgId = firstChild.id
+            this.svgId = firstChild.id;
+          }
         }
       }
     }
@@ -248,7 +257,7 @@ export default class ArweaveViewer extends HTMLElement {
     .then(response => response.text())
     .then(text => {
       // console.log('source text: ', text);
-      this.sourceCode = text
+      // this.sourceCode = text
       return text
     }).catch(error => {
       return error
