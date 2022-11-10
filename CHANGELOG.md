@@ -1,3 +1,6 @@
+### Version 0.1.37
+- update hue settings
+
 ### Version 0.1.36
 - update hue theme copmile
 
