@@ -346,11 +346,11 @@ export default class ArweaveViewer extends HTMLElement {
     }
     if (duration) {
       styleString = styleString + `
---prmnt-intensity: ${duration};`;
+--prmnt-duration: ${duration};`;
     }
     if (hue) {
       styleString = styleString + `
---prmnt-intensity: ${hue};`;
+--prmnt-hue: ${hue};`;
     }
     if (theme) {
       styleString = styleString + `
