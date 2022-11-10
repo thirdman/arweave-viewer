@@ -76,12 +76,11 @@ export default class ArweaveViewer extends HTMLElement {
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$info = this._shadowRoot.querySelector('#info');
 
-    console.log('::VIEWER init: ', this);
-    
-    // this.speed = this.getAttribute('speed');
-    
+    // console.log('::VIEWER init: ', this);
     // console.log('this.svgId', this.svgId)
     if (!devMode) {
+      // removes the info node used for debugging
+      // TODO: removce this functionality.
       this.$info && this.$info.remove()
     }
     if (this.$card) {
@@ -98,63 +97,32 @@ export default class ArweaveViewer extends HTMLElement {
       this.$info.innerHTML = `<span>hue: ${this.hue}, uid: ${this.uid}</span>`
     }
     
+    /**
+     * SOURCES>...
+     */
     if (this.source) {
-      const sourceValue = await this.svgFileToString(this.source);
-      // console.log('source sourcevalue: ', sourceValue)
-      // this._sourceCode = sourceValue;
-
-      // console.log('source now: ', this.sourceCode)
-      
-      // const parser = new DOMParser();
-      // if (parser) {
-        
-      //   const fragment = parser.parseFromString(this.source, "text/html");
-      //   console.log('source: fragment', fragment)
-      //   console.log('source: outerHTML', fragment.outerHTML)
-      //   // var tmp = document.createElement("div");
-      //   // tmp.appendChild(fragment);
-      //   // console.log('source: tmp' , tmp); // <p>Test</p>
-      //   // console.log('source: outerHTML' , tmp.innerHTML); // <p>Test</p>
-
-      //   const s = new XMLSerializer().serializeToString(fragment)
-      //   const encodedData = window.btoa(s);
-      // console.log('source: ',{s, encodedData})
-
-      //   // console.log('doc3', doc3);
-      // }      
       this.$card.innerHTML = this.sourceCode;
-      
       const firstChild = this.$card && this.$card.firstChild;
       const svgId = firstChild.id
-      // console.log('this.card.firstChild.id', svgId)
       this.svgId = svgId;
-      
     }
-    
     if (this.content && !this.hashId) {
-      // const url = 'http://arweave.net/LUW9bB3NHQOKr_Wgy8bVXCEViV52nopHA9ASkW4yS8s' //  + this.hashId
-      // const url2 = 'http://arweave.net/' + this.hashId
-        this.$card.innerHTML = this.content;
-      
+      this.$card.innerHTML = this.content;
     }
     if (this.hashId && !this.src) {
-      //const url = 'http://arweave.net/LUW9bB3NHQOKr_Wgy8bVXCEViV52nopHA9ASkW4yS8s' //  + this.hashId
       const url2 = 'https://arweave.net/' + this.hashId
       this.$iframe.src = url2;
     }
-    // if (this.src && !this.hashId) {
-    //   this.$iframe.src = this.src;
-    // }
+    /**
+     * THEMES...
+     */
     if (this.hue && !this.theme) {
       const newTheme = this.compileThemeFromHue(this.hue)
       this.hueTheme = newTheme;
-      console.log('::VIEWER newTheme', newTheme, this.hueTheme, 'color: lime;')
+      console.warn('::VIEWER newTheme', newTheme, this.hueTheme)
     }
     if (this.theme || this.hueTheme) {
-      // console.log('theme: ', this.theme)
       const theme = this.theme || this.hueTheme;
-      // console.log('theme', theme)
-      // console.log('this.theme.substring(0, 3)', theme.substring(0, 3));
       let themeType;
       if (theme.substring(0, 1) === '#') {
         themeType = 'hex'
@@ -170,20 +138,12 @@ export default class ArweaveViewer extends HTMLElement {
       }
       
       let themeArray = theme.split('|');
-      // console.log('about to split theme from string', theme, themeArray)
       if (themeType === 'hexNumbers') {
-        // console.log('themeTYpe hexnumbers add #: ', themeArray)
         themeArray = themeArray.map(number => {
           let value = `#${number}`
-          // console.log('themeTYpe value', value)
           return value
         });
-        // console.log('themeTYpe from hexnumbers now', themeArray)
       }
-      // console.log('themeArray', themeArray);
-      
-      // console.log('check for svgId', this.svgId)
-      // console.log('check for this.compileElementString', this.compileElementString)
       const compiledHeadString = this.compileHeadString(themeArray, 'test1234');
       const compiledElementString = this.compileElementString(themeArray, 'test1234');
       let styleEl = document.createElement('style');
@@ -197,13 +157,10 @@ export default class ArweaveViewer extends HTMLElement {
         const appendedStyle = ` ${tempStyle}  ${compiledElementString}`
         elementEl.setAttribute && elementEl.setAttribute('style', appendedStyle);
       }
-
+      // LEAGACY:
       // this.$card.style.setProperty('--c-c', this.aspect ? this.aspect : null);
       // this.$iframe.src = this.src;
     }
-    // const tesChild = document.createElement('div')
-    //   tesChild.innerHTML=`<span>blah ${this.hue}</span>`
-    //   this.$card.innerHTML = `<span>blah ${this.hue}</span>`
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -217,19 +174,17 @@ export default class ArweaveViewer extends HTMLElement {
         this.iframe.src = newValue;
         break;
       case 'source':
+        console.warn('source changed: UNHANDLED')
         // this.iframe.src = newValue;
         break;
       case 'title':
         this.iframe.title = newValue;
         break;
       case 'hue':
-        
         if (this.$card) {
           const el = this.$card.firstChild
           el.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
         }
-        
-        
         break;
       case 'content':
         this.iframe.src = this.content;
@@ -259,13 +214,8 @@ export default class ArweaveViewer extends HTMLElement {
         break;
       case 'duration':
         if (this.$card) {
-        // console.log('this.svgId', this.svgId)
-          // console.log('this.$card.firstChild', this.$card.firstChild)
           const el = this.$card.firstChild
           el.style.setProperty('--prmnt-duration', this.duration ? this.duration : null);
-        //   el.style.setProperty('--prmnt-test', '1234');
-        //   el.style.setProperty('border', '10px solid red');
-        //  this.$card.style.setProperty('--prmnt-duration', this.duration ? this.duration : null);
         }
         break;
       case 'progress':
@@ -297,14 +247,16 @@ export default class ArweaveViewer extends HTMLElement {
 }
 
   /**
+   * THEME FROM HUE
    * Compiled a theme from a hue value
+   * TODO: abstact into seperate module
    */
   compileThemeFromHue(hue) {
     const arrayLength = 5
     const minLimit = 10; // sets the darkest range. Ie contrast will be between 10 and 90;
     const maxLimit = 10; // sets the lightest range. Ie contrast will be between 10 and 90;
     const contrast = (100 - minLimit - maxLimit) / (arrayLength + 1); 
-    console.log('contrast', contrast)
+    // console.log('contrast', contrast)
     
     const array = Array.from(Array(arrayLength).keys())
     const theme = array.map((_, index) => { 
@@ -326,20 +278,17 @@ export default class ArweaveViewer extends HTMLElement {
     let classesString = ` 
       `
       
-      array.map((item, index) => {
-        // this.$card.style.setProperty(`--c-c${index+1}`, item);  
-        // this.$card.style.setProperty(`background`, item);  
-        
+    array.map((item, index) => {
+        // NEW LINE ENSURE THE CSS IS FORMATTED CORECTLY
+      // TODO: minimise
         styleString = styleString + `--c-c${index + 1}: ${item};
         
-          `
-        // console.log('item', item)
+        `
       });
       array.map((item, index) => {
         classesString = classesString + `
         ${id && `#${id}`} .cs-c${index + 1}{stroke: var(--c-c${index + 1});}
           `
-        // console.log('item', item)
       });
       
       const compiledStyleString = `
@@ -359,7 +308,7 @@ export default class ArweaveViewer extends HTMLElement {
     const intensity = this.getAttribute('intensity')
     const duration = this.getAttribute('duration')
     const hue = this.getAttribute('hue')
-    console.log('::VIEWER compileelementstring:', { speed, duration, hue, intensity })
+    
     const styleStringPrefix = ``
     const styleStringSuffix = ``
     let styleString = ` `
@@ -383,6 +332,10 @@ export default class ArweaveViewer extends HTMLElement {
       styleString = styleString + `
 --prmnt-intensity: ${hue};`;
     }
+    if (theme) {
+      styleString = styleString + `
+--prmnt-theme: ${theme};`;
+    }
       
       
       const compiledElementStyleString = `
@@ -391,7 +344,7 @@ export default class ArweaveViewer extends HTMLElement {
         ${styleStringSuffix}
         
         `;
-    console.log('compiledElementStyleString', compiledElementStyleString)
+    console.log('::VIEWER compiledElementStyleString', compiledElementStyleString)
     return compiledElementStyleString
   }
 
