@@ -136,43 +136,42 @@ export default class ArweaveViewer extends HTMLElement {
     }
     if (this.theme || this.hueTheme) {
       const theme = this.theme || this.hueTheme;
-      let themeType;
-      if (theme.substring(0, 1) === '#') {
-        themeType = 'hex'
-      }
-      if (theme.substring(0, 3) === 'hsl') {
-        themeType = 'hsl'
-      }
-      if (theme.substring(0, 3) === 'rgb') {
-        themeType = 'rgb'
-      }
-      if (!themeType) {
-        themeType = 'hexNumbers'
-      }
+      this.compileTheme(theme);
+      // let themeType;
+      // if (theme.substring(0, 1) === '#') {
+      //   themeType = 'hex'
+      // }
+      // if (theme.substring(0, 3) === 'hsl') {
+      //   themeType = 'hsl'
+      // }
+      // if (theme.substring(0, 3) === 'rgb') {
+      //   themeType = 'rgb'
+      // }
+      // if (!themeType) {
+      //   themeType = 'hexNumbers'
+      // }
       
-      let themeArray = theme.split('|');
-      if (themeType === 'hexNumbers') {
-        themeArray = themeArray.map(number => {
-          let value = `#${number}`
-          return value
-        });
-      }
-      const compiledHeadString = this.compileHeadString(themeArray, 'test1234');
-      const compiledElementString = this.compileElementString(themeArray, 'test1234');
-      let styleEl = document.createElement('style');
-      styleEl.textContent = compiledHeadString
-      this._shadowRoot.appendChild(styleEl);
-      // ADD TO ELEMENT STYLES IN CASE EXISTING NEED TO BE OVERRIDEN
-      const elementEl = this.$card && this.$card.firstChild
-      if (elementEl) {
-        const styleEl = elementEl.style || document.createElement('style');
-        const tempStyle = styleEl && elementEl && elementEl.getAttribute && elementEl.getAttribute('style') || '';
-        const appendedStyle = ` ${tempStyle}  ${compiledElementString}`
-        elementEl.setAttribute && elementEl.setAttribute('style', appendedStyle);
-      }
-      // LEAGACY:
-      // this.$card.style.setProperty('--c-c', this.aspect ? this.aspect : null);
-      // this.$iframe.src = this.src;
+      // let themeArray = theme.split('|');
+      // if (themeType === 'hexNumbers') {
+      //   themeArray = themeArray.map(number => {
+      //     let value = `#${number}`
+      //     return value
+      //   });
+      // }
+      // const compiledHeadString = this.compileHeadString(themeArray, 'test1234');
+      // const compiledElementString = this.compileElementString(themeArray, 'test1234');
+      // let styleEl = document.createElement('style');
+      // styleEl.textContent = compiledHeadString
+      // this._shadowRoot.appendChild(styleEl);
+      // // ADD TO ELEMENT STYLES IN CASE EXISTING NEED TO BE OVERRIDEN
+      // const elementEl = this.$card && this.$card.firstChild
+      // if (elementEl) {
+      //   const styleEl = elementEl.style || document.createElement('style');
+      //   const tempStyle = styleEl && elementEl && elementEl.getAttribute && elementEl.getAttribute('style') || '';
+      //   const appendedStyle = ` ${tempStyle}  ${compiledElementString}`
+      //   elementEl.setAttribute && elementEl.setAttribute('style', appendedStyle);
+      // }
+     
     }
   }
 
@@ -234,6 +233,8 @@ export default class ArweaveViewer extends HTMLElement {
         if (this.$card) {
           const el = this.$card.firstChild
           el.style.setProperty('--prmnt-theme', this.theme ? this.theme : null);
+          const test = this.compileTheme(this.theme);
+          console.log('test', test)
         }
         break;
       case 'intensity':
@@ -275,7 +276,49 @@ export default class ArweaveViewer extends HTMLElement {
     });
     return result
 }
-
+/**
+   * THEME
+   * Compiled a theme from a themeString
+   * TODO: absttact into seperate module
+   */
+  compileTheme(theme) {
+    if (!theme) { return }
+     let themeType;
+      if (theme.substring(0, 1) === '#') {
+        themeType = 'hex'
+      }
+      if (theme.substring(0, 3) === 'hsl') {
+        themeType = 'hsl'
+      }
+      if (theme.substring(0, 3) === 'rgb') {
+        themeType = 'rgb'
+      }
+      if (!themeType) {
+        themeType = 'hexNumbers'
+      }
+      
+      let themeArray = theme.split('|');
+      if (themeType === 'hexNumbers') {
+        themeArray = themeArray.map(number => {
+          let value = `#${number}`
+          return value
+        });
+      }
+      const compiledHeadString = this.compileHeadString(themeArray, 'test1234');
+      const compiledElementString = this.compileElementString(themeArray, 'test1234');
+      let styleEl = document.createElement('style');
+      styleEl.textContent = compiledHeadString
+      this._shadowRoot.appendChild(styleEl);
+      // ADD TO ELEMENT STYLES IN CASE EXISTING NEED TO BE OVERRIDEN
+      const elementEl = this.$card && this.$card.firstChild
+      if (elementEl) {
+        const styleEl = elementEl.style || document.createElement('style');
+        const tempStyle = styleEl && elementEl && elementEl.getAttribute && elementEl.getAttribute('style') || '';
+        const appendedStyle = ` ${tempStyle}  ${compiledElementString}`
+        elementEl.setAttribute && elementEl.setAttribute('style', appendedStyle);
+      }
+    return themeArray;
+  }
   /**
    * THEME FROM HUE
    * Compiled a theme from a hue value
@@ -364,6 +407,7 @@ export default class ArweaveViewer extends HTMLElement {
 --prmnt-hue: ${hue};`;
     }
     if (theme) {
+      console.log('compileElementString theme', theme)
       styleString = styleString + `
 --prmnt-theme: ${theme};`;
     }
