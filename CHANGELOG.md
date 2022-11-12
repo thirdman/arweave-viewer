@@ -1,3 +1,6 @@
+### Version 0.1.38
+- Handle updating theme
+
 ### Version 0.1.37
 - update hue settings
 
