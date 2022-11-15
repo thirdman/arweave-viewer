@@ -382,6 +382,7 @@ export default class ArweaveViewer extends HTMLElement {
     const duration = this.getAttribute('duration')
     const hue = this.getAttribute('hue')
     const theme = this.getAttribute('theme')
+    const progress = this.getAttribute('progress')
     
     const styleStringPrefix = ``
     const styleStringSuffix = ``
@@ -410,6 +411,11 @@ export default class ArweaveViewer extends HTMLElement {
       console.log('compileElementString theme', theme)
       styleString = styleString + `
 --prmnt-theme: ${theme};`;
+    }
+    if (progress) {
+      console.log('compileElementString progress', progress)
+      styleString = styleString + `
+--prmnt-progress: ${progress};`;
     }
       
       
@@ -559,6 +565,26 @@ export default class ArweaveViewer extends HTMLElement {
     }
     return undefined;
   }
+
+  /**
+   * PROGRESSue.
+   */
+  get progress() {
+    if (this.hasAttribute('progress')) {
+      return this.getAttribute('progress') || undefined;
+    }
+    return undefined;
+  }
+
+  set progress(value) {
+    console.log('set progress', value)
+    if (val) {
+      this.setAttribute('progress', value);
+    } else {
+      this.removeAttribute('progress');
+    }
+  }
+
 
   /**
    * SPEED
