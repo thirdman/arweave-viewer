@@ -1,3 +1,6 @@
+### Version 0.1.39
+- set progress value
+
 ### Version 0.1.38
 - Handle updating theme
 
