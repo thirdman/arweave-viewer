@@ -1,5 +1,7 @@
 ### Version 0.1.40
-- Update display-card.js
+- Update display-card
+- add source option
+- remove some logging
 
 ### Version 0.1.39
 - set progress value
