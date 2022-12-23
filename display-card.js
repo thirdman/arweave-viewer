@@ -176,10 +176,10 @@ export default class ArweaveViewer extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log('::VIEWER attr changed', {name, oldValue, newValue })
+    // console.log('::VIEWER attr changed', {name, oldValue, newValue })
     switch (name) {
       case 'uid':
-        console.log('uid changed')
+        // console.log('uid changed')
         this.uid = newValue;
         break;
       case 'src':
@@ -188,8 +188,8 @@ export default class ArweaveViewer extends HTMLElement {
         }
         break;
       case 'source':
-        console.warn('source changed: UNHANDLED')
-        // this.iframe.src = newValue;
+        console.warn('source changed: newValue')
+        this.iframe.srcDoc = newValue;
         break;
       case 'title':
         if (this.$iframe) {
