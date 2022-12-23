@@ -1,3 +1,6 @@
+### Version 0.1.40
+- Update display-card.js
+
 ### Version 0.1.39
 - set progress value
 
