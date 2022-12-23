@@ -188,8 +188,10 @@ export default class ArweaveViewer extends HTMLElement {
         }
         break;
       case 'source':
-        console.warn('source changed: newValue')
-        this.$iframe.srcDoc = newValue;
+        console.warn('source changed: ', newValue)
+        if (this.$iframe) {
+          this.$iframe.srcDoc = newValue;
+        }
         break;
       case 'title':
         if (this.$iframe) {
