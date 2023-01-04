@@ -1,3 +1,7 @@
+### Version 0.1.43
+- improve debug information
+- Update README.md
+
 ### Version 0.1.42
 - fix iframe reference
 

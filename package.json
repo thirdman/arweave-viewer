@@ -1,6 +1,6 @@
 {
   "name": "arweave-viewer",
-  "version": "0.1.42",
+  "version": "0.1.43",
   "license": "MIT",
   "description": "Display an arweave file",
   "repository": "thirdman/arweave-viewer",
