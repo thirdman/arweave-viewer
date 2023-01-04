@@ -1,5 +1,6 @@
-const template = document.createElement('template');
 const devMode = false;
+const template = document.createElement('template');
+
 template.innerHTML = `
   <style>
     :host {
@@ -68,17 +69,20 @@ export default class ArweaveViewer extends HTMLElement {
       'speed',
       'duration',
       'intensity',
-      'progress'
+      'progress',
+      'debug'
     ];
   }
   async init() {
+    
     this.$card = this._shadowRoot.querySelector('#card');
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$info = this._shadowRoot.querySelector('#info');
+    this.$showDebugInfo = devMode || this.debug || false;
 
     // console.log('::VIEWER init: ', this);
     // console.log('this.svgId', this.svgId)
-    if (!devMode) {
+    if (!this.$showDebugInfo) {
       // removes the info node used for debugging
       // TODO: removce this functionality.
       this.$info && this.$info.remove()
@@ -122,7 +126,7 @@ export default class ArweaveViewer extends HTMLElement {
     if (this.content && !this.hashId) {
       this.$card.innerHTML = this.content;
     }
-    if (this.hashId && !this.src) {
+    if (this.hashId && !this.src && this.$iframe) {
       const url2 = 'https://arweave.net/' + this.hashId
       this.$iframe.src = url2;
     }
@@ -176,10 +180,12 @@ export default class ArweaveViewer extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // console.log('::VIEWER attr changed', {name, oldValue, newValue })
+    // console.log('::attr changed', name, newValue, oldValue)
+    if (this.debug && oldValue && oldValue !== newValue) {
+      console.log('::VIEWER attr changed', {name, oldValue, newValue })
+    }
     switch (name) {
       case 'uid':
-        // console.log('uid changed')
         this.uid = newValue;
         break;
       case 'src':
@@ -188,8 +194,10 @@ export default class ArweaveViewer extends HTMLElement {
         }
         break;
       case 'source':
-        console.warn('source changed: ', newValue)
         if (this.$iframe) {
+          if (this.$iframe.srcDoc !== newValue && this.debug) {
+            console.warn('source changed: ', newValue)
+          }
           this.$iframe.srcDoc = newValue;
         }
         break;
@@ -206,11 +214,9 @@ export default class ArweaveViewer extends HTMLElement {
       case 'hue':
         if (this.$card) {
           const el = this.$card.firstChild
-          // console.log(':: VIEWER hue Changed', this.hue)
           el.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
           const newTheme = this.compileThemeFromHue(this.hue)
           this.hueTheme = newTheme;
-          // console.log('::VIEWER newTheme', newTheme);
           let themeArray = newTheme.split('|');
           const elementEl = this.$card.firstChild
           if (elementEl && themeArray.length ) {
@@ -235,8 +241,10 @@ export default class ArweaveViewer extends HTMLElement {
         if (this.$card) {
           const el = this.$card.firstChild
           el.style.setProperty('--prmnt-theme', this.theme ? this.theme : null);
-          const test = this.compileTheme(this.theme);
-          console.log('test', test)
+          if (this.debug) {
+            const test = this.compileTheme(this.theme);
+            console.log('theme test', test)
+          }
         }
         break;
       case 'intensity':
@@ -255,6 +263,16 @@ export default class ArweaveViewer extends HTMLElement {
         if (this.$card) {
           const el = this.$card.firstChild
           el.style.setProperty('--prmnt-progress', this.progress ? this.progress : null);
+        }
+        break;
+      case 'debug':
+        // console.log('DEBUG showing new value', this.debug, typeof this.debug)
+        if (this.debug) {
+          console.log('DEBUG is now set')
+          this.$showDebugInfo = true;
+        } else {
+          console.log('DEBUG is now unset')
+          this.$showDebugInfo = false;
         }
         break;
     }
@@ -638,6 +656,23 @@ export default class ArweaveViewer extends HTMLElement {
       this.setAttribute('intensity', value);
     } else {
       this.removeAttribute('intensity');
+    }
+  }
+  /**
+   * DEBUGGING
+   */
+  get debug() {
+    if (this.hasAttribute('debug')) {
+      return this.getAttribute('debug') || undefined;
+    }
+    return undefined;
+  }
+
+  set debug(value) {
+    if (value) {
+      this.setAttribute('debug', value);
+    } else {
+      this.removeAttribute('debug');
     }
   }
   

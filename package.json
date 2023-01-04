@@ -3,7 +3,6 @@
   "version": "0.1.42",
   "license": "MIT",
   "description": "Display an arweave file",
-  "license": "MIT",
   "repository": "thirdman/arweave-viewer",
   "main": "display-card.js",
   "keywords": [
@@ -13,5 +12,8 @@
   ],
   "scripts": {
     "dev": "http-server -p 8080"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }
