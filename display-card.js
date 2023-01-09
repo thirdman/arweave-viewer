@@ -49,6 +49,8 @@ export default class ArweaveViewer extends HTMLElement {
     this._shadowRoot.appendChild(template.content.cloneNode(true));
     this.hueTheme = null
     this.sourceCode = null
+    this.$card = this._shadowRoot.querySelector('#card');
+    
   }
   
 
@@ -60,19 +62,18 @@ export default class ArweaveViewer extends HTMLElement {
     return [
       'src',
       'source',
-      // 'arweave', // deprecated
       'hash',
       'uid',
       'aspect',
       'content',
       'theme',
       'hue',
-      'speed',
       'duration',
       'intensity',
       'progress',
       'extended',
       'debug'
+      // 'arweave', // deprecated
     ];
   }
   async init() {
@@ -81,10 +82,6 @@ export default class ArweaveViewer extends HTMLElement {
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$info = this._shadowRoot.querySelector('#info');
     this.$showDebugInfo = devMode || this.debug || false;
-    // this.$showDebugInfo = devMode
-
-    // console.log('::VIEWER init: ', this);
-    // console.log('this.svgId', this.svgId)
     if (!this.$showDebugInfo) {
       // removes the info node used for debugging
       // TODO: removce this functionality.
@@ -145,41 +142,12 @@ export default class ArweaveViewer extends HTMLElement {
     if (this.theme || this.hueTheme) {
       const theme = this.theme || this.hueTheme;
       this.compileTheme(theme);
-      // let themeType;
-      // if (theme.substring(0, 1) === '#') {
-      //   themeType = 'hex'
-      // }
-      // if (theme.substring(0, 3) === 'hsl') {
-      //   themeType = 'hsl'
-      // }
-      // if (theme.substring(0, 3) === 'rgb') {
-      //   themeType = 'rgb'
-      // }
-      // if (!themeType) {
-      //   themeType = 'hexNumbers'
-      // }
-      
-      // let themeArray = theme.split('|');
-      // if (themeType === 'hexNumbers') {
-      //   themeArray = themeArray.map(number => {
-      //     let value = `#${number}`
-      //     return value
-      //   });
-      // }
-      // const compiledHeadString = this.compileHeadString(themeArray, 'test1234');
-      // const compiledElementString = this.compileElementString(themeArray, 'test1234');
-      // let styleEl = document.createElement('style');
-      // styleEl.textContent = compiledHeadString
-      // this._shadowRoot.appendChild(styleEl);
-      // // ADD TO ELEMENT STYLES IN CASE EXISTING NEED TO BE OVERRIDEN
-      // const elementEl = this.$card && this.$card.firstChild
-      // if (elementEl) {
-      //   const styleEl = elementEl.style || document.createElement('style');
-      //   const tempStyle = styleEl && elementEl && elementEl.getAttribute && elementEl.getAttribute('style') || '';
-      //   const appendedStyle = ` ${tempStyle}  ${compiledElementString}`
-      //   elementEl.setAttribute && elementEl.setAttribute('style', appendedStyle);
-      // }
-     
+    }
+    /**
+     * EXTENDED/ENHANCED
+     */
+    if (this.extended) {
+      this.handleExtend();
     }
   }
 
@@ -235,12 +203,14 @@ export default class ArweaveViewer extends HTMLElement {
         break;
       case 'hue':
         if (this.$card) {
-          const el = this.$card.firstChild
-          el.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
+          
+          const elementEl = this.$card.firstChild
+          
+          
+          elementEl && elementEl.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
           const newTheme = this.compileThemeFromHue(this.hue)
           this.hueTheme = newTheme;
           let themeArray = newTheme.split('|');
-          const elementEl = this.$card.firstChild
           if (elementEl && themeArray.length ) {
             themeArray.map((color, index) => {
               elementEl.style.setProperty(`--c-c${index + 1}`, color);
@@ -253,12 +223,7 @@ export default class ArweaveViewer extends HTMLElement {
          this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
         }
         break;
-      case 'speed':
-        if (this.$card) {
-          const el = this.$card.firstChild
-          el.style.setProperty('--prmnt-speed', this.speed ? this.speed : null);
-        }
-        break;
+      
       case 'theme':
         if (this.$card) {
           const el = this.$card.firstChild
@@ -268,8 +233,7 @@ export default class ArweaveViewer extends HTMLElement {
             }
             return
           } else {
-            console.log('el', el)
-            el.style.setProperty('--prmnt-theme', this.theme ? this.theme : '');
+            el.style && el.style.setProperty('--prmnt-theme', this.theme ? this.theme : '');
             this.compileTheme(this.theme);
             
           }
@@ -279,14 +243,13 @@ export default class ArweaveViewer extends HTMLElement {
         if (this.$card) {
           const el = this.$card.firstChild
           const value = this.intensity || ""
-          el.style.setProperty('--prmnt-intensity', value);
-          console.log('intensity el now: ', el.style)
+          el.style && el.style.setProperty('--prmnt-intensity', value);
         }
         break;
       case 'duration':
         if (this.$card) {
           const el = this.$card.firstChild
-          el.style.setProperty('--prmnt-duration', this.duration ? this.duration : null);
+          el.style && el.style.setProperty('--prmnt-duration', this.duration ? this.duration : null);
         }
         break;
       case 'progress':
@@ -296,32 +259,12 @@ export default class ArweaveViewer extends HTMLElement {
         }
         break;
       case 'extended':
-        console.log('extended is', this.extended)
+        // console.log('extended is', this.extended)
+        if (this.debug) {
         console.log('extended card', this.$card)
+        }
         if (this.$card) {
-          const el = this.$card.firstChild
-          const existingStyleEl = el.style;
-          
-          const styleEl =  document.createElement('style');
-          // el.style || 
-          console.log('existingStyleEl', existingStyleEl)
-          
-          const appendedStyle = `  ${this.extended}`
-//          el.setAttribute && el.setAttribute('style', appendedStyle);
-          // el.replaceChild('style', appendedStyle)
-          
-          styleEl.textContent = this.extended
-          console.log('styleEl', styleEl)
-          if (existingStyleEl) {
-            const tempels =  el.getElementsByTagName('style')
-            const tempel =  tempels[0]
-            console.log('tempel', tempel)
-            if (tempel) {
-              el.removeChild(tempel)
-            }
-          }
-          el.appendChild(styleEl);
-          console.log('extended el', el.style)
+          this.handleExtend();
         }
         break;
       case 'debug':
@@ -339,6 +282,25 @@ export default class ArweaveViewer extends HTMLElement {
 
 
   
+  /**
+   * EXTEND LOGIC
+   */
+  handleExtend() {
+    const el = this.$card.firstChild
+    const existingStyleEl = el.style;
+          
+    const styleEl = document.createElement('style');
+    styleEl.textContent = this.extended
+          
+    if (existingStyleEl) {
+      const tempels = el.getElementsByTagName('style')
+      const tempel = tempels[0]
+      if (tempel) {
+        el.removeChild(tempel)
+      }
+    }
+    el.appendChild(styleEl);
+  }
   /**
    * SVG FILE TO STRING
    * @param {source} 
@@ -402,7 +364,7 @@ export default class ArweaveViewer extends HTMLElement {
       styleEl.textContent = compiledHeadString
       const existingRootStyle = this._shadowRoot.style;
     
-    console.warn('existingStyle ', existingRootStyle)
+    
       if (existingRootStyle) {
         console.warn('existingRootStyle exists', existingRootStyle)
         this._shadowRoot.replaceChild(styleEl);
@@ -431,7 +393,7 @@ export default class ArweaveViewer extends HTMLElement {
         styleEl =  document.createElement('style');
       }
       const tempStyle = styleEl && elementEl.getAttribute && elementEl.getAttribute('style') || '';
-      console.log('compiledElementString', compiledElementString)
+      
       const appendedStyle = ` ${tempStyle}  ${compiledElementString}`
       elementEl.setAttribute && elementEl.setAttribute('style', appendedStyle);
       }
@@ -488,21 +450,19 @@ export default class ArweaveViewer extends HTMLElement {
         ${styleStringSuffix}
         ${classesString}
         `;
-  
-    console.log('::VIEWER compiledStyleString', compiledStyleString)
     return compiledStyleString
   }
  /**
+  * COMPILE ELEMENT STRING
    * Compiled the element styles
    */
   compileElementString(array, id) {
-    const speed = this.getAttribute('speed')
     const intensity = this.getAttribute('intensity')
     const duration = this.getAttribute('duration')
     const hue = this.getAttribute('hue')
     const theme = this.getAttribute('theme')
     const progress = this.getAttribute('progress')
-    console.log('compileElementString array', array)
+    
     const styleStringPrefix = ``
     const styleStringSuffix = ``
     let styleString = ` `
@@ -517,10 +477,7 @@ export default class ArweaveViewer extends HTMLElement {
 --c-c${index + 1}: ${item};`
       });
     }
-    if (speed) {
-      styleString = styleString + `
---prmnt-speed: ${speed};`;
-    }
+    
     if (intensity) {
       styleString = styleString + `
 --prmnt-intensity: ${intensity};`;
@@ -557,6 +514,7 @@ export default class ArweaveViewer extends HTMLElement {
 
   /**
    * Compiled the classes
+   * TODO: figure out if this can be removed or refactored
    */
   compileClasses(array) {
     // let classString = `
@@ -589,7 +547,10 @@ export default class ArweaveViewer extends HTMLElement {
   }
 
   /**
-   * Get src property of the object.
+   * GETTERS AND SETTERS
+   */
+  /**
+   * SRC
    */
   get src(){
     if (this.hasAttribute('src')) {
@@ -628,7 +589,6 @@ export default class ArweaveViewer extends HTMLElement {
     if (this.hasAttribute('aspect')) {
       return this.getAttribute('aspect') || undefined;
     }
-
     return undefined;
   }
 
@@ -699,15 +659,11 @@ export default class ArweaveViewer extends HTMLElement {
     } else {
       this.removeAttribute('theme');
     }
-    // if (val == null) {
-    //   this.removeAttribute('theme');
-    // } else {
-    //   this.setAttribute('theme', value);
-    // }
+    
   }
   
   /**
-   * Get the hue.
+   * HUE
    */
   get hue() {
     if (this.hasAttribute('hue')) {
@@ -754,24 +710,6 @@ export default class ArweaveViewer extends HTMLElement {
     }
   }
 
-
-  /**
-   * SPEED
-   */
-  get speed() {
-    if (this.hasAttribute('speed')) {
-      return this.getAttribute('speed') || undefined;
-    }
-    return undefined;
-  }
-
-  set speed(value) {
-    if (value) {
-      this.setAttribute('speed', value);
-    } else {
-      this.removeAttribute('speed');
-    }
-  }
   
   /**
    * DURATION

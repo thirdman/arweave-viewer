@@ -45,9 +45,46 @@
     <div class="col">
 
       <arweave-viewer id="example1" content="<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' width='640' height='640'
-      viewBox='0 0 640 640' class='pa' '>
-      <circle class='cs-c1' stroke-width='2' cx='320' cy='320' r='320'/>
-      </svg>" aspect="1/1" duration="5" extended=".cs-c1{stroke: pink !important;}circle{fill: red;}">
+      viewBox='0 0 640 640' class='pa' style='background: hsl(11, 60%, 50%); --prmnt-duration: 22;'>
+      <g stroke='hsl(11, 60%, 25%)' fill='none'>
+      <g class='c' style='--n: 1;'>
+      <circle class='cs-c1' stroke-width='2' cx='320' cy='320' r='12' stroke-dashoffset='20'
+      stroke-dasharray='16 22 20' />
+      </g>
+      <g class='c' style='--n: 2;'>
+      <circle class='cs-c1' stroke-width='12' cx='320' cy='320' r='16' stroke-dashoffset='40'
+      stroke-dasharray='32 22 20' />
+      </g>
+      <g class='c' style='--n: 3;'>
+      <circle class='cs-c1' stroke-width='16' cx='320' cy='320' r='32' stroke-dashoffset='60'
+      stroke-dasharray='48 22 20' />
+      </g>
+      <g class='c' style='--n: 4;'>
+      <circle class='cs-c1' stroke-width='32' cx='320' cy='320' r='48' stroke-dashoffset='80'
+      stroke-dasharray='80 22 20' />
+      </g>
+      <g class='c' style='--n: 5;'>
+      <circle class='cs-c1' stroke-width='48' cx='320' cy='320' r='80' stroke-dashoffset='100'
+      stroke-dasharray='128 22 20' />
+      </g>
+      <g class='c' style='--n: 6;'>
+      <circle class='cs-c1' stroke-width='80' cx='320' cy='320' r='128' stroke-dashoffset='120'
+      stroke-dasharray='208 22 20' />
+      </g>
+      <g class='c' style='--n: 7;'>
+      <circle class='cs-c1' stroke-width='128' cx='320' cy='320' r='208' stroke-dashoffset='140'
+      stroke-dasharray='336 22 20' />
+      </g>
+      </g>
+      <style>
+      g.c {
+      fill: none;
+      }
+      </style>
+      </svg>" aspect="1/1" duration="5" extended=".cs-c1{stroke: var(--c-c1);stroke-dashoffset: calc(10px * var(--n, 10) * var(--prmnt-intensity, 10));}
+      g.c{fill:none;animation: calc(1s * var(--prmnt-duration, 12)) ease-in-out
+      infinite r1;transform-origin:320px 320px;animation-delay: calc(-1s * var(--n));}@keyframes r1{0%{transform:rotate(0)
+      scale(1)}50%{transform:rotate(180deg) scale(1.4)}}">
       </arweave-viewer>
     </div>
     <div class="col">
@@ -63,21 +100,8 @@
       <button
         onclick="handleSetAttribute('example1', 'extended', 'circle.cs-c1{stroke: lime !important;}circle{fill: blue;}')">set
         extended lime</button>
-      <button onclick="handleSetAttribute('example1', 'extended', `
-        .cs-c1{
-          stroke: var(--c-c1);
-          stroke-dasharray: calc(1px * var(--n, 30) * var(--prmnt-intensity, 100)) calc(1px * var(--prmnt-intensity, 30)) !important;
-        }
-        g.c{
-          fill:none;animation: var(--prmnt-duration, 12s) ease-in-out infinite r1;transform-origin:320px 320px;
-          animation-delay: calc(-1s * var(--n));
-        }
-
-        
-          @keyframes r1{
-            0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.4)}100%{transform:rotate(360) scale(1);}}
-        }
-        `)">set
+      <button
+        onclick="handleSetAttribute('example1', 'extended', `.cs-c1{stroke: var(--c-c1);stroke-dasharray: calc(1px * var(--n, 30) * var(--prmnt-intensity, 100)) calc(1px * var(--prmnt-intensity, 30)) !important;}g.c{fill:none;animation: calc(1s * var(--prmnt-duration, 12)) ease-in-out infinite r1;transform-origin:320px 320px;animation-delay: calc(-1s * var(--n));}@keyframes r1{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.4)}}`)">set
         extended animate</button>
       <!-- g.c:nth-child(1){
         animation-delay: -2s;
@@ -202,7 +226,7 @@
       }
       const srcMap = {
         origin: `<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' width='640' height='640'
-      viewBox='0 0 640 640' class='pa' style='background: hsl(11, 60%, 50%); --prmnt-duration: 22s;'>
+      viewBox='0 0 640 640' class='pa' style='background: hsl(11, 60%, 50%); --prmnt-duration: 22;'>
       <g stroke='hsl(11, 60%, 25%)' fill="none">
       <g class='c' style='--n: 1;'>
       <circle class='cs-c1' stroke-width='2' cx='320' cy='320' r='12' stroke-dashoffset='20'
