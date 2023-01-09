@@ -16,31 +16,141 @@
   <h1>SVG/HTML theme Render</h1>
   <p>Custom web Component to display source of SVG with theme-able attributes</p>
   <p class=" subtitle">For demos run a local server and view /demos </p>
-  <pre>
-...
-    source="https://arweave.net/4A97ZHcjZ5AOjwBCXktL6tzS4mV_MPJNR00UIYC3uHk"
-    aspect="1/1"
-    theme="#000000|#444444|#777777|#aaaaaa|#cccccc"
-    speed="1"
-    intensity="2"
-    
-    
 
-  </pre>
-  <!--   
+
   <hr />
   <div class="row">
     <div class="col">
       <p>Source</p>
-      <arweave-viewer source="https://arweave.net/4A97ZHcjZ5AOjwBCXktL6tzS4mV_MPJNR00UIYC3uHk" aspect="1/1"
-        theme="#000000|#444444|#777777|#aaaaaa|#cccccc" speed="2" intensity="10">
+      <arweave-viewer id="example2" source="https://arweave.net/4A97ZHcjZ5AOjwBCXktL6tzS4mV_MPJNR00UIYC3uHk"
+        aspect="1/1" theme="#000000|#444444|#777777|#aaaaaa|#cccccc" speed="2" intensity="10">
       </arweave-viewer>
-      
+
     </div>
     <div class="col"></div>
-  </div> -->
+  </div>
 
+  <div class="row">
+    <div class="col">
+      <pre>&lt;svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' width='640' height='640'
+      viewBox='0 0 640 640' class='pa' style='background: hsl(11, 60%, 50%);'&gt;
+      &lt;g stroke='hsl(11, 60%, 25%)'&gt;
+     ...
+    </pre>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col">
+
+      <arweave-viewer id="example1" content="<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' width='640' height='640'
+      viewBox='0 0 640 640' class='pa' '>
+      <circle class='cs-c1' stroke-width='2' cx='320' cy='320' r='320'/>
+      </svg>" aspect="1/1" duration="5" extended=".cs-c1{stroke: pink !important;}circle{fill: red;}">
+      </arweave-viewer>
+    </div>
+    <div class="col">
+      <button onclick="handleSetAttribute('example1', 'debug', true)">set debug true</button>
+      <button onclick="handleSetAttribute('example1', 'debug', '')">set debug false</button>
+      <hr />
+      <button onclick="handleSetSrc('example1', 'content', 'origin')">set content origin</button>
+      <button onclick="handleSetSrc('example1', 'content', 'circle')">set content circle</button>
+      <button onclick="handleSetSrc('example1', 'content', 'rect')">set content rect</button>
+      <hr />
+      <button onclick="handleSetAttribute('example1', 'extended', '')">set
+        extended NONE</button>
+      <button
+        onclick="handleSetAttribute('example1', 'extended', 'circle.cs-c1{stroke: lime !important;}circle{fill: blue;}')">set
+        extended lime</button>
+      <button onclick="handleSetAttribute('example1', 'extended', `
+        .cs-c1{
+          stroke: var(--c-c1);
+          stroke-dasharray: calc(1px * var(--n, 30) * var(--prmnt-intensity, 100)) calc(1px * var(--prmnt-intensity, 30)) !important;
+        }
+        g.c{
+          fill:none;animation: var(--prmnt-duration, 12s) ease-in-out infinite r1;transform-origin:320px 320px;
+          animation-delay: calc(-1s * var(--n));
+        }
+
+        
+          @keyframes r1{
+            0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.4)}100%{transform:rotate(360) scale(1);}}
+        }
+        `)">set
+        extended animate</button>
+      <!-- g.c:nth-child(1){
+        animation-delay: -2s;
+        }
+        g.c:nth-child(2){
+        animation-delay: -4s;
+        }
+        g.c:nth-child(3){
+        animation-delay: -6s;
+        }
+        g.c:nth-child(4){
+        animation-delay: -8s;
+        }
+        g.c:nth-child(5){
+        animation-delay: -10s;
+        }
+        g.c:nth-child(6){
+        animation-delay: -2s;
+        } -->
+      <button
+        onclick="handleSetAttribute('example1', 'extended', '.cs-c1{stroke: blue !important;}circle{fill: orange;}')">set
+        extended</button>
+
+      <hr />
+      <br />
+      <button onclick="handleSetAttribute('example1', 'intensity', 1)">set intensity 1</button>
+      <button onclick="handleSetAttribute('example1', 'intensity', 4)">set intensity 4</button>
+      <button onclick="handleSetAttribute('example1', 'intensity', 12)">set intensity 12</button>
+      <button onclick="handleSetAttribute('example1', 'intensity', 20)">set intensity 20</button>
+      <hr />
+      <!-- <button onclick="handleSetAttribute('test', 'duration', 2)">set duration 2</button>
+      <button onclick="handleSetAttribute('test', 'duration', 10)">set duration 7</button>
+      <button onclick="handleSetAttribute('test', 'duration', 14)">set duration 14</button>
+      <button onclick="handleSetAttribute('test', 'duration', 33)">set duration 33</button>
+      <hr />
+      <button onclick="handleSetAttribute('test', 'intensity', 1)">set intensity 1</button>
+      <button onclick="handleSetAttribute('test', 'intensity', 4)">set intensity 4</button>
+      <button onclick="handleSetAttribute('test', 'intensity', 12)">set intensity 12</button>
+      <button onclick="handleSetAttribute('test', 'intensity', 20)">set intensity 20</button>
+      <hr />
+      <button onclick="handleSetAttribute('test', 'hue', 12)">set hue 12</button>
+      <button onclick="handleSetAttribute('test', 'hue', 29)">set hue 29</button>
+      <button onclick="handleSetAttribute('test', 'hue', 180)">set hue 180</button>
+      <hr />
+      <button onclick="handleSetAttribute('test', 'progress', 1)">set progress 1</button>
+      <button onclick="handleSetAttribute('test', 'progress', 35)">set progress 35</button>
+      <button onclick="handleSetAttribute('test', 'progress', 85)">set progress 85</button>
+      <hr /> -->
+      <button onclick="handleSetAttribute('example1', 'theme', '#000000|#444444|#777777|#aaaaaa|#cccccc')">set theme
+        #000000|#444444|#777777|#aaaaaa|#cccccc</button>
+      <button onclick="handleSetAttribute('example1', 'theme', '#aaaaaa|#999999|#777777|#555555|#333333')">set theme
+        aaaaaa|#999999|#777777|#555555|#333333</button>
+      <button onclick="handleSetAttribute('example1', 'theme', '')">set theme null</button>
+
+    </div>
+  </div>
   <hr />
+  <div class="row">
+    <div class="col">
+      <h2>progress and theming</h2>
+      <pre>
+        ...
+            source="https://arweave.net/4A97ZHcjZ5AOjwBCXktL6tzS4mV_MPJNR00UIYC3uHk"
+            aspect="1/1"
+            theme="#000000|#444444|#777777|#aaaaaa|#cccccc"
+            speed="1"
+            intensity="2"
+            
+            
+        
+          </pre>
+    </div>
+  </div>
   <div class="row">
     <div class="col">
       <!-- <arweave-viewer id="test" source="https://arweave.net/kgJxtrhIu-z-disnlI1lSLD8FBugPdX75S_ZSv8MGX8" aspect="1/1"
@@ -84,6 +194,67 @@
       const el = document.getElementById(element);
       if (!el) { return }
       el.setAttribute(attr, value)
+    }
+    function handleSetSrc(element, attr, key) {
+      if (!key) {
+        console.log('no key');
+        return
+      }
+      const srcMap = {
+        origin: `<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' width='640' height='640'
+      viewBox='0 0 640 640' class='pa' style='background: hsl(11, 60%, 50%); --prmnt-duration: 22s;'>
+      <g stroke='hsl(11, 60%, 25%)' fill="none">
+      <g class='c' style='--n: 1;'>
+      <circle class='cs-c1' stroke-width='2' cx='320' cy='320' r='12' stroke-dashoffset='20'
+      stroke-dasharray='16 22 20' />
+      </g>
+      <g class='c' style='--n: 2;'>
+      <circle class='cs-c1' stroke-width='12' cx='320' cy='320' r='16' stroke-dashoffset='40'
+      stroke-dasharray='32 22 20' />
+      </g>
+      <g class='c' style='--n: 3;'>
+      <circle class='cs-c1' stroke-width='16' cx='320' cy='320' r='32' stroke-dashoffset='60'
+      stroke-dasharray='48 22 20' />
+      </g>
+      <g class='c' style='--n: 4;'>
+      <circle class='cs-c1' stroke-width='32' cx='320' cy='320' r='48' stroke-dashoffset='80'
+      stroke-dasharray='80 22 20' />
+      </g>
+      <g class='c' style='--n: 5;'>
+      <circle class='cs-c1' stroke-width='48' cx='320' cy='320' r='80' stroke-dashoffset='100'
+      stroke-dasharray='128 22 20' />
+      </g>
+      <g class='c' style='--n: 6;'>
+      <circle class='cs-c1' stroke-width='80' cx='320' cy='320' r='128' stroke-dashoffset='120'
+      stroke-dasharray='208 22 20' />
+      </g>
+      <g class='c' style='--n: 7;'>
+      <circle class='cs-c1' stroke-width='128' cx='320' cy='320' r='208' stroke-dashoffset='140'
+      stroke-dasharray='336 22 20' />
+      </g>
+      </g>
+      <style>
+      g.c {
+      fill: none;
+      }
+      </style>
+      </svg>`,
+        circle: `<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' width='640' height='640'
+      viewBox='0 0 640 640' class='pa' '>
+      <circle class='cs-c1' stroke-width='2' cx='320' cy='320' r='320'/>
+      </svg>`,
+        rect: `<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='xMidYMid meet' width='640' height='640'
+      viewBox='0 0 640 640' class='pa' '>
+      <rect width="640" height="640" fill="pink" />
+
+      </svg>`
+      }
+      const src = srcMap[key];
+      // console.log('src', key, src)
+      const el = document.getElementById(element);
+      if (!el) { return }
+      el.setAttribute('content', src)
+
     }
   </script>
   <script src=' ./display-card.js' type="module">

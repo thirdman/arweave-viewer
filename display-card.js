@@ -1,4 +1,4 @@
-const devMode = false;
+const devMode = true;
 const template = document.createElement('template');
 
 template.innerHTML = `
@@ -60,7 +60,8 @@ export default class ArweaveViewer extends HTMLElement {
     return [
       'src',
       'source',
-      'id',
+      // 'arweave', // deprecated
+      'hash',
       'uid',
       'aspect',
       'content',
@@ -70,6 +71,7 @@ export default class ArweaveViewer extends HTMLElement {
       'duration',
       'intensity',
       'progress',
+      'extended',
       'debug'
     ];
   }
@@ -79,6 +81,7 @@ export default class ArweaveViewer extends HTMLElement {
     this.$iframe = this._shadowRoot.querySelector('iframe');
     this.$info = this._shadowRoot.querySelector('#info');
     this.$showDebugInfo = devMode || this.debug || false;
+    // this.$showDebugInfo = devMode
 
     // console.log('::VIEWER init: ', this);
     // console.log('this.svgId', this.svgId)
@@ -96,9 +99,10 @@ export default class ArweaveViewer extends HTMLElement {
       this.$info.innerHTML = `<span>hue: ${this.hue}</span>`
     }
     if (this.uid && this.$info) {
-      // console.log('this.uid exists', this.uid)
-      // console.log('this.$info exists', this.$info)
       this.$info.innerHTML = `<span>hue: ${this.hue}, uid: ${this.uid}</span>`
+    }
+    if (this.theme && this.$info) {
+      this.$info.innerHTML = `<pre>theme: ${this.theme}</pre>`
     }
     
     /**
@@ -123,11 +127,11 @@ export default class ArweaveViewer extends HTMLElement {
         }
       }
     }
-    if (this.content && !this.hashId) {
+    if (this.content && !this.hash) {
       this.$card.innerHTML = this.content;
     }
-    if (this.hashId && !this.src && this.$iframe) {
-      const url2 = 'https://arweave.net/' + this.hashId
+    if (this.hash && !this.src && this.$iframe) {
+      const url2 = 'https://arweave.net/' + this.hash
       this.$iframe.src = url2;
     }
     /**
@@ -195,10 +199,13 @@ export default class ArweaveViewer extends HTMLElement {
         break;
       case 'source':
         if (this.$iframe) {
-          if (this.$iframe.srcDoc !== newValue && this.debug) {
+          if (this.debug) {
             console.warn('source changed: ', newValue)
           }
-          this.$iframe.srcDoc = newValue;
+          if (this.$iframe.srcDoc !== newValue) {
+            console.warn('source changed: ', newValue)
+            this.$iframe.srcDoc = newValue;
+          }
         }
         break;
       case 'title':
@@ -207,9 +214,24 @@ export default class ArweaveViewer extends HTMLElement {
         }
         break;
       case 'content':
-        if (this.$iframe) {
-          this.$iframe.src = this.content;
+        // if (this.$iframe) {
+        //   this.$iframe.src = this.content;
+        // }
+        if (this.hash) {
+          console.log('hash exists, cannot set content')
+          return
         }
+        if (this.$card) {
+          if (this.debug) {
+            console.warn('content changed: ', newValue)
+          }
+          this.$card.innerHTML = this.content;
+        } else {
+          if (this.debug) {
+            console.warn('card does not exist for content to set: ')
+          }
+        }
+        
         break;
       case 'hue':
         if (this.$card) {
@@ -240,17 +262,25 @@ export default class ArweaveViewer extends HTMLElement {
       case 'theme':
         if (this.$card) {
           const el = this.$card.firstChild
-          el.style.setProperty('--prmnt-theme', this.theme ? this.theme : null);
-          if (this.debug) {
-            const test = this.compileTheme(this.theme);
-            console.log('theme test', test)
+          if (!el) {
+            if (this.debug) {
+              console.error(':VIEWER: cant set theme, no element')
+            }
+            return
+          } else {
+            console.log('el', el)
+            el.style.setProperty('--prmnt-theme', this.theme ? this.theme : '');
+            this.compileTheme(this.theme);
+            
           }
         }
         break;
       case 'intensity':
         if (this.$card) {
           const el = this.$card.firstChild
-          el.style.setProperty('--prmnt-intensity', this.intensity ? this.intensity : null);
+          const value = this.intensity || ""
+          el.style.setProperty('--prmnt-intensity', value);
+          console.log('intensity el now: ', el.style)
         }
         break;
       case 'duration':
@@ -263,6 +293,35 @@ export default class ArweaveViewer extends HTMLElement {
         if (this.$card) {
           const el = this.$card.firstChild
           el.style.setProperty('--prmnt-progress', this.progress ? this.progress : null);
+        }
+        break;
+      case 'extended':
+        console.log('extended is', this.extended)
+        console.log('extended card', this.$card)
+        if (this.$card) {
+          const el = this.$card.firstChild
+          const existingStyleEl = el.style;
+          
+          const styleEl =  document.createElement('style');
+          // el.style || 
+          console.log('existingStyleEl', existingStyleEl)
+          
+          const appendedStyle = `  ${this.extended}`
+//          el.setAttribute && el.setAttribute('style', appendedStyle);
+          // el.replaceChild('style', appendedStyle)
+          
+          styleEl.textContent = this.extended
+          console.log('styleEl', styleEl)
+          if (existingStyleEl) {
+            const tempels =  el.getElementsByTagName('style')
+            const tempel =  tempels[0]
+            console.log('tempel', tempel)
+            if (tempel) {
+              el.removeChild(tempel)
+            }
+          }
+          el.appendChild(styleEl);
+          console.log('extended el', el.style)
         }
         break;
       case 'debug':
@@ -302,8 +361,20 @@ export default class ArweaveViewer extends HTMLElement {
    * TODO: absttact into seperate module
    */
   compileTheme(theme) {
-    if (!theme) { return }
-     let themeType;
+    let compiledHeadString
+    let compiledElementString
+    let themeArray
+    if (!theme) {
+      // handleClearTheme
+      themeArray = []
+      // console.log('removing theme!')
+      compiledHeadString = this.compileHeadString(themeArray, 'test1234');
+      compiledElementString = this.compileElementString(themeArray, 'test1234');
+      
+      
+    } else {
+    
+      let themeType;
       if (theme.substring(0, 1) === '#') {
         themeType = 'hex'
       }
@@ -317,25 +388,52 @@ export default class ArweaveViewer extends HTMLElement {
         themeType = 'hexNumbers'
       }
       
-      let themeArray = theme.split('|');
+      themeArray = theme.split('|');
       if (themeType === 'hexNumbers') {
         themeArray = themeArray.map(number => {
           let value = `#${number}`
           return value
         });
       }
-      const compiledHeadString = this.compileHeadString(themeArray, 'test1234');
-      const compiledElementString = this.compileElementString(themeArray, 'test1234');
+      compiledHeadString = this.compileHeadString(themeArray, 'test1234');
+      compiledElementString = this.compileElementString(themeArray, 'test1234');
+    }
       let styleEl = document.createElement('style');
       styleEl.textContent = compiledHeadString
-      this._shadowRoot.appendChild(styleEl);
-      // ADD TO ELEMENT STYLES IN CASE EXISTING NEED TO BE OVERRIDEN
-      const elementEl = this.$card && this.$card.firstChild
-      if (elementEl) {
-        const styleEl = elementEl.style || document.createElement('style');
-        const tempStyle = styleEl && elementEl && elementEl.getAttribute && elementEl.getAttribute('style') || '';
-        const appendedStyle = ` ${tempStyle}  ${compiledElementString}`
-        elementEl.setAttribute && elementEl.setAttribute('style', appendedStyle);
+      const existingRootStyle = this._shadowRoot.style;
+    
+    console.warn('existingStyle ', existingRootStyle)
+      if (existingRootStyle) {
+        console.warn('existingRootStyle exists', existingRootStyle)
+        this._shadowRoot.replaceChild(styleEl);
+      } else {
+        this._shadowRoot.appendChild(styleEl);
+
+      }
+    
+    // ADD TO ELEMENT STYLES IN CASE EXISTING NEED TO BE OVERRIDEN
+    const elementEl = this.$card && this.$card.firstChild
+    if (elementEl) {
+      
+      const existingStyleElement = elementEl.style;
+      
+      if (existingStyleElement) {
+        styleEl = elementEl.style 
+        if (!theme) {
+          styleEl.removeProperty(`--c-c1`);
+          styleEl.removeProperty(`--c-c2`);
+          styleEl.removeProperty(`--c-c3`);
+          styleEl.removeProperty(`--c-c4`);
+          styleEl.removeProperty(`--c-c5`);
+          styleEl.removeProperty(`--prmnt-theme`);
+        }
+      } else {
+        styleEl =  document.createElement('style');
+      }
+      const tempStyle = styleEl && elementEl.getAttribute && elementEl.getAttribute('style') || '';
+      console.log('compiledElementString', compiledElementString)
+      const appendedStyle = ` ${tempStyle}  ${compiledElementString}`
+      elementEl.setAttribute && elementEl.setAttribute('style', appendedStyle);
       }
     return themeArray;
   }
@@ -366,30 +464,31 @@ export default class ArweaveViewer extends HTMLElement {
    */
   compileHeadString(array, id) {
     const styleStringPrefix = `:host{`
-      const styleStringSuffix = `}`
-      let styleString = ` `
+    const styleStringSuffix = `}`
+    let styleString = ` `
     let classesString = ` 
       `
-      
+    
     array.map((item, index) => {
-        // NEW LINE ENSURE THE CSS IS FORMATTED CORECTLY
+      // NEW LINE ENSURE THE CSS IS FORMATTED CORECTLY
       // TODO: minimise
-        styleString = styleString + `--c-c${index + 1}: ${item};
+      styleString = styleString + `--c-c${index + 1}: ${item};
         
         `
-      });
-      array.map((item, index) => {
-        classesString = classesString + `
+    });
+    array.map((item, index) => {
+      classesString = classesString + `
         ${id && `#${id}`} .cs-c${index + 1}{stroke: var(--c-c${index + 1});}
           `
-      });
+    });
       
-      const compiledStyleString = `
+    let compiledStyleString = `
         ${styleStringPrefix} 
         ${styleString} 
         ${styleStringSuffix}
         ${classesString}
         `;
+  
     console.log('::VIEWER compiledStyleString', compiledStyleString)
     return compiledStyleString
   }
@@ -403,14 +502,21 @@ export default class ArweaveViewer extends HTMLElement {
     const hue = this.getAttribute('hue')
     const theme = this.getAttribute('theme')
     const progress = this.getAttribute('progress')
-    
+    console.log('compileElementString array', array)
     const styleStringPrefix = ``
     const styleStringSuffix = ``
     let styleString = ` `
+    if (!array || !array.length) {
+      console.log('no array, should remove css vars')
+      styleString = styleString + `
+`
+      
+    } else {
       array.map((item, index) => {
         styleString = styleString + `
 --c-c${index + 1}: ${item};`
       });
+    }
     if (speed) {
       styleString = styleString + `
 --prmnt-speed: ${speed};`;
@@ -428,13 +534,11 @@ export default class ArweaveViewer extends HTMLElement {
 --prmnt-hue: ${hue};`;
     }
     if (theme) {
-      console.log('compileElementString theme', theme)
       styleString = styleString + `
 --prmnt-theme: ${theme};`;
     }
     if (progress) {
-      console.log('compileElementString progress', progress)
-      styleString = styleString + `
+    styleString = styleString + `
 --prmnt-progress: ${progress};`;
     }
       
@@ -445,7 +549,9 @@ export default class ArweaveViewer extends HTMLElement {
         ${styleStringSuffix}
         
         `;
-    console.log('::VIEWER compiledElementStyleString', compiledElementStyleString)
+      if (this.debug) {
+        console.log('::VIEWER compiledElementStyleString', compiledElementStyleString)
+      }
     return compiledElementStyleString
   }
 
@@ -489,18 +595,31 @@ export default class ArweaveViewer extends HTMLElement {
     if (this.hasAttribute('src')) {
       return this.getAttribute('src') || undefined;
     }
-
     return undefined;
   }
+  set src(val) {
+    if (val) {
+      this.setAttribute('src', value);
+    } else {
+      this.removeAttribute('src');
+    }
+  }
   /**
-   * Get source 
+   * SOURCE
+   * generally svg/html code 
    */
   get source(){
     if (this.hasAttribute('source')) {
       return this.getAttribute('source') || undefined;
     }
-
     return undefined;
+  }
+  set src(source) {
+    if (source) {
+      this.setAttribute('source', value);
+    } else {
+      this.removeAttribute('source');
+    }
   }
   /**
    * Get aspect property of the object.
@@ -525,16 +644,21 @@ export default class ArweaveViewer extends HTMLElement {
   }
   
   /**
-   * Get the hash Id property of the object.
+   * Get the hash property of the object.
    */
-  get hashId() {
-    if (this.hasAttribute('id')) {
-      return this.getAttribute('id') || undefined;
+  get hash() {
+    if (this.hasAttribute('hash')) {
+      return this.getAttribute('hash') || undefined;
     }
-
     return undefined;
   }
-  
+  set hash(val) {
+    if (val == null) {
+      this.removeAttribute('hash');
+    } else {
+      this.setAttribute('hash', value);
+    }
+  }
   /**
    * Get the content string.
    */
@@ -542,10 +666,24 @@ export default class ArweaveViewer extends HTMLElement {
     if (this.hasAttribute('content')) {
       return this.getAttribute('content') || undefined;
     }
-
     return undefined;
   }
-  
+  /**
+   * Get the extended style.
+   */
+  get extended() {
+    if (this.hasAttribute('extended')) {
+      return this.getAttribute('extended') || undefined;
+    }
+    return undefined;
+  }
+  set extended(val) {
+    if (val) {
+      this.setAttribute('extended', val);
+    } else {
+      this.removeAttribute('extended');
+    }
+  }
   /**
    * Get the theme.
    */
@@ -555,7 +693,18 @@ export default class ArweaveViewer extends HTMLElement {
     }
     return undefined;
   }
-  
+  set theme(val) {
+    if (val) {
+      this.setAttribute('theme', val);
+    } else {
+      this.removeAttribute('theme');
+    }
+    // if (val == null) {
+    //   this.removeAttribute('theme');
+    // } else {
+    //   this.setAttribute('theme', value);
+    // }
+  }
   
   /**
    * Get the hue.
@@ -587,7 +736,7 @@ export default class ArweaveViewer extends HTMLElement {
   }
 
   /**
-   * PROGRESSue.
+   * PROGRESS.
    */
   get progress() {
     if (this.hasAttribute('progress')) {
