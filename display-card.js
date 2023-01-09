@@ -287,6 +287,10 @@ export default class ArweaveViewer extends HTMLElement {
    */
   handleExtend() {
     const el = this.$card.firstChild
+    if (this.debug) {
+      
+      console.log('typeof(el)', typeof(el), el.nodeType)
+    }
     const existingStyleEl = el.style;
           
     const styleEl = document.createElement('style');
@@ -299,7 +303,9 @@ export default class ArweaveViewer extends HTMLElement {
         el.removeChild(tempel)
       }
     }
-    el.appendChild(styleEl);
+    if (el.nodeType !== 3) { // text node
+      el.appendChild(styleEl);
+    }
   }
   /**
    * SVG FILE TO STRING
