@@ -1,3 +1,6 @@
+### Version 0.2.0
+- add extend functionality
+
 ### Version 0.1.43
 - improve debug information
 - Update README.md
