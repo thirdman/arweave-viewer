@@ -72,6 +72,7 @@ export default class ArweaveViewer extends HTMLElement {
       'intensity',
       'progress',
       'extended',
+      'style',
       'debug'
       // 'arweave', // deprecated
     ];
@@ -300,7 +301,9 @@ export default class ArweaveViewer extends HTMLElement {
       const tempels = el.getElementsByTagName('style')
       const tempel = tempels[0]
       if (tempel) {
-        el.removeChild(tempel)
+        if (el.contains(tempel)) {
+          el.removeChild(tempel)
+        }
       }
     }
     if (el.nodeType !== 3) { // text node
@@ -709,7 +712,7 @@ export default class ArweaveViewer extends HTMLElement {
 
   set progress(value) {
     console.log('set progress', value)
-    if (val) {
+    if (val === 0 || val) {
       this.setAttribute('progress', value);
     } else {
       this.removeAttribute('progress');
@@ -749,6 +752,23 @@ export default class ArweaveViewer extends HTMLElement {
       this.setAttribute('intensity', value);
     } else {
       this.removeAttribute('intensity');
+    }
+  }
+  /**
+   * STYLE
+   */
+  get style() {
+    if (this.hasAttribute('style')) {
+      return this.getAttribute('style') || undefined;
+    }
+    return undefined;
+  }
+
+  set style(value) {
+    if (value) {
+      this.setAttribute('style', value);
+    } else {
+      this.removeAttribute('style');
     }
   }
   /**
