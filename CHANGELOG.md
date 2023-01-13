@@ -1,3 +1,6 @@
+### Version 0.2.3
+- Fix bug on removing element
+
 ### Version 0.2.2
 - bug fix
 
