@@ -207,12 +207,17 @@ export default class ArweaveViewer extends HTMLElement {
           
           const elementEl = this.$card.firstChild
           
-          
+          if (this.debug) {
+            console.log('hue updated. about to set --prmnt-hue')
+          }
           elementEl && elementEl.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
           const newTheme = this.compileThemeFromHue(this.hue)
           this.hueTheme = newTheme;
           let themeArray = newTheme.split('|');
-          if (elementEl && themeArray.length ) {
+          if (elementEl && themeArray.length) {
+            if (this.debug) {
+            console.log('hue updated. about to set --prmnt-c')
+          }
             themeArray.map((color, index) => {
               elementEl.style.setProperty(`--c-c${index + 1}`, color);
             })
@@ -244,7 +249,7 @@ export default class ArweaveViewer extends HTMLElement {
         if (this.$card) {
           const el = this.$card.firstChild
           const value = this.intensity || ""
-          el.style && el.style.setProperty('--prmnt-intensity', value);
+          el.style.setProperty('--prmnt-intensity', value ? value : null);
         }
         break;
       case 'duration':
