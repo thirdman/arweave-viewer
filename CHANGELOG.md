@@ -1,3 +1,6 @@
+### Version 0.2.4
+- fix intensity error
+
 ### Version 0.2.3
 - Fix bug on removing element
 
