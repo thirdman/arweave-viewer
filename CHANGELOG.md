@@ -1,3 +1,6 @@
+### Version 0.2.5
+- Update display-card.js
+
 ### Version 0.2.4
 - fix intensity error
 
