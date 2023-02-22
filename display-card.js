@@ -153,7 +153,6 @@ export default class ArweaveViewer extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // console.log('::attr changed', name, newValue, oldValue)
     if (this.debug && oldValue && oldValue !== newValue) {
       console.log('::VIEWER attr changed', {name, oldValue, newValue })
     }
@@ -235,7 +234,7 @@ export default class ArweaveViewer extends HTMLElement {
           const el = this.$card.firstChild
           if (!el) {
             if (this.debug) {
-              console.error(':VIEWER: cant set theme, no element')
+              console.warn(':VIEWER: cant set theme, no element')
             }
             return
           } else {
@@ -249,7 +248,7 @@ export default class ArweaveViewer extends HTMLElement {
         if (this.$card) {
           const el = this.$card.firstChild
           const value = this.intensity || ""
-          el.style.setProperty('--prmnt-intensity', value ? value : null);
+          el.style && el.style.setProperty('--prmnt-intensity', value ? value : null);
         }
         break;
       case 'duration':
@@ -261,7 +260,14 @@ export default class ArweaveViewer extends HTMLElement {
       case 'progress':
         if (this.$card) {
           const el = this.$card.firstChild
-          el.style.setProperty('--prmnt-progress', this.progress ? this.progress : null);
+          if (!el) {
+            if (this.debug) {
+              console.log('cannot find el when setting intensity')
+            }
+            break;
+          }
+          const value = this.progress || ""
+          el.style && el.style.setProperty('--prmnt-progress', value ? value : null);
         }
         break;
       case 'extended':
