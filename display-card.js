@@ -62,7 +62,7 @@ export default class ArweaveViewer extends HTMLElement {
     return [
       'aspect',
       'style',
-      'debug'
+      'debug',
       // CONTENT
       'src',
       'source',

@@ -44,7 +44,7 @@
 - update hue settings
 
 ### Version 0.1.36
-- update hue theme copmile
+- update hue theme compile
 
 ### Version 0.1.35
 - Apply correct css variables
