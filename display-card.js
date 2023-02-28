@@ -60,21 +60,23 @@ export default class ArweaveViewer extends HTMLElement {
   }
   static get observedAttributes(){
     return [
+      'aspect',
+      'style',
+      'debug'
+      // CONTENT
       'src',
       'source',
+      'content',
       'hash',
       'uid',
-      'aspect',
-      'content',
+      'extended',
+      // ATTRIBUTES
       'theme',
       'hue',
       'duration',
       'intensity',
+      'depth',
       'progress',
-      'extended',
-      'style',
-      'debug'
-      // 'arweave', // deprecated
     ];
   }
   async init() {
@@ -84,8 +86,8 @@ export default class ArweaveViewer extends HTMLElement {
     this.$info = this._shadowRoot.querySelector('#info');
     this.$showDebugInfo = devMode || this.debug || false;
     if (!this.$showDebugInfo) {
-      // removes the info node used for debugging
-      // TODO: removce this functionality.
+      // Removes the info node used for debugging
+      // TODO: this can be refactored
       this.$info && this.$info.remove()
     }
     if (this.$card) {
@@ -201,6 +203,13 @@ export default class ArweaveViewer extends HTMLElement {
         }
         
         break;
+      case 'aspect':
+        if (this.$card) {
+         this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
+        }
+        break;
+      
+      
       case 'hue':
         if (this.$card) {
           
@@ -223,12 +232,6 @@ export default class ArweaveViewer extends HTMLElement {
           }
         }
         break;
-      case 'aspect':
-        if (this.$card) {
-         this.$card.style.setProperty('--aspectRatio', this.aspect ? this.aspect : null);
-        }
-        break;
-      
       case 'theme':
         if (this.$card) {
           const el = this.$card.firstChild
@@ -251,6 +254,13 @@ export default class ArweaveViewer extends HTMLElement {
           el.style && el.style.setProperty('--prmnt-intensity', value ? value : null);
         }
         break;
+      case 'depth':
+        if (this.$card) {
+          const el = this.$card.firstChild
+          const value = this.depth || ""
+          el.style && el.style.setProperty('--prmnt-depth', value ? value : null);
+        }
+        break;
       case 'duration':
         if (this.$card) {
           const el = this.$card.firstChild
@@ -262,7 +272,7 @@ export default class ArweaveViewer extends HTMLElement {
           const el = this.$card.firstChild
           if (!el) {
             if (this.debug) {
-              console.log('cannot find el when setting intensity')
+              console.log('cannot find el when setting progress')
             }
             break;
           }
@@ -474,10 +484,11 @@ export default class ArweaveViewer extends HTMLElement {
   }
  /**
   * COMPILE ELEMENT STRING
-   * Compiled the element styles
+   * Compiled the element styles for injection
    */
   compileElementString(array, id) {
     const intensity = this.getAttribute('intensity')
+    const depth = this.getAttribute('depth')
     const duration = this.getAttribute('duration')
     const hue = this.getAttribute('hue')
     const theme = this.getAttribute('theme')
@@ -501,6 +512,10 @@ export default class ArweaveViewer extends HTMLElement {
     if (intensity) {
       styleString = styleString + `
 --prmnt-intensity: ${intensity};`;
+    }
+    if (depth) {
+      styleString = styleString + `
+--prmnt-depth: ${depth};`;
     }
     if (duration) {
       styleString = styleString + `
@@ -763,6 +778,23 @@ export default class ArweaveViewer extends HTMLElement {
       this.setAttribute('intensity', value);
     } else {
       this.removeAttribute('intensity');
+    }
+  }
+  /**
+   * DEPTH
+   */
+  get depth() {
+    if (this.hasAttribute('depth')) {
+      return this.getAttribute('depth') || undefined;
+    }
+    return undefined;
+  }
+
+  set depth(value) {
+    if (value) {
+      this.setAttribute('depth', value);
+    } else {
+      this.removeAttribute('depth');
     }
   }
   /**
