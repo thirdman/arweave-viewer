@@ -1,3 +1,6 @@
+### Version 0.2.6
+- Add depth attribute
+
 ### Version 0.2.5
 - Update display-card.js
 
