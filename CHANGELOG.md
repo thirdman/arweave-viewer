@@ -1,3 +1,6 @@
+### Version 0.2.7
+- typo fixes
+
 ### Version 0.2.6
 - Add depth attribute
 
