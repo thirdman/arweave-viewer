@@ -233,8 +233,11 @@ export default class ArweaveViewer extends HTMLElement {
               console.log('hue updated. about to set --prmnt-c')
             }
             themeArray.map((color, index) => {
-              el.style.setProperty(`--c-c${index + 1}`, color);
+              el.style && el.style.setProperty(`--c-c${index + 1}`, color);
             })
+            if (!el.style) {
+              console.warn(':VIEWER cannot set color class, no el.style')
+            }
           }
         }
         break;
