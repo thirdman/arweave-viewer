@@ -213,21 +213,27 @@ export default class ArweaveViewer extends HTMLElement {
       case 'hue':
         if (this.$card) {
           
-          const elementEl = this.$card.firstChild
           
+          const el = this.$card.firstChild
           if (this.debug) {
             console.log('hue updated. about to set --prmnt-hue')
           }
-          elementEl && elementEl.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
+          if (!el) {
+            if (this.debug) {
+              console.warn(':VIEWER: cant set hue, no element')
+            }
+            break
+          }
+          el.style && el.style.setProperty('--prmnt-hue', this.hue ? this.hue : null);
           const newTheme = this.compileThemeFromHue(this.hue)
           this.hueTheme = newTheme;
           let themeArray = newTheme.split('|');
-          if (elementEl && themeArray.length) {
+          if (themeArray.length) {
             if (this.debug) {
-            console.log('hue updated. about to set --prmnt-c')
-          }
+              console.log('hue updated. about to set --prmnt-c')
+            }
             themeArray.map((color, index) => {
-              elementEl.style.setProperty(`--c-c${index + 1}`, color);
+              el.style.setProperty(`--c-c${index + 1}`, color);
             })
           }
         }
