@@ -236,6 +236,7 @@ export default class ArweaveViewer extends HTMLElement {
               el.style && el.style.setProperty(`--c-c${index + 1}`, color);
             })
             if (!el.style) {
+              //todo: resolve this
               console.warn(':VIEWER cannot set color class, no el.style')
             }
           }

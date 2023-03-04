@@ -1,3 +1,6 @@
+### Version 0.2.9
+- Fix secondary hue bug
+
 ### Version 0.2.8
 - fix hue error
 
