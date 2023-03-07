@@ -1,3 +1,6 @@
+### Version 0.2.10
+- change debug mode
+
 ### Version 0.2.9
 - Fix secondary hue bug
 
