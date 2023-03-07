@@ -1,4 +1,4 @@
-const devMode = true;
+const devMode = false;
 const template = document.createElement('template');
 
 template.innerHTML = `

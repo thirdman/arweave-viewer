@@ -95,6 +95,10 @@
       <button onclick="handleSetSrc('example1', 'content', 'circle')">set content circle</button>
       <button onclick="handleSetSrc('example1', 'content', 'rect')">set content rect</button>
       <hr />
+      <button onclick="handleSetSrc('example1', 'hue', '10')">set hue 10</button>
+      <button onclick="handleSetSrc('example1', 'hue', '170')">set hue 170</button>
+      <button onclick="handleSetSrc('example1', 'hue', '292')">set hue 292</button>
+      <hr />
       <button onclick="handleSetAttribute('example1', 'extended', '')">set
         extended NONE</button>
       <button
@@ -132,6 +136,7 @@
       <button onclick="handleSetAttribute('example1', 'intensity', 12)">set intensity 12</button>
       <button onclick="handleSetAttribute('example1', 'intensity', 20)">set intensity 20</button>
       <hr />
+
       <!-- <button onclick="handleSetAttribute('test', 'duration', 2)">set duration 2</button>
       <button onclick="handleSetAttribute('test', 'duration', 10)">set duration 7</button>
       <button onclick="handleSetAttribute('test', 'duration', 14)">set duration 14</button>
@@ -141,10 +146,7 @@
       <button onclick="handleSetAttribute('test', 'intensity', 4)">set intensity 4</button>
       <button onclick="handleSetAttribute('test', 'intensity', 12)">set intensity 12</button>
       <button onclick="handleSetAttribute('test', 'intensity', 20)">set intensity 20</button>
-      <hr />
-      <button onclick="handleSetAttribute('test', 'hue', 12)">set hue 12</button>
-      <button onclick="handleSetAttribute('test', 'hue', 29)">set hue 29</button>
-      <button onclick="handleSetAttribute('test', 'hue', 180)">set hue 180</button>
+      
       <hr />
       <button onclick="handleSetAttribute('test', 'progress', 1)">set progress 1</button>
       <button onclick="handleSetAttribute('test', 'progress', 35)">set progress 35</button>
@@ -215,11 +217,14 @@
   </div>
   <script>
     function handleSetAttribute(element, attr, value) {
+      console.log('element, attr, value', element, attr, value)
       const el = document.getElementById(element);
+      console.log('el', el)
       if (!el) { return }
       el.setAttribute(attr, value)
     }
     function handleSetSrc(element, attr, key) {
+
       if (!key) {
         console.log('no key');
         return
