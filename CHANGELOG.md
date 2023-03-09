@@ -1,3 +1,6 @@
+### Version 0.2.11
+- Added animate attribute
+
 ### Version 0.2.10
 - change debug mode
 
