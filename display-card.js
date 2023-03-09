@@ -17,6 +17,10 @@ template.innerHTML = `
       object-fit: cover;
       aspect-ratio: var(--aspectRatio);
     }
+    div#card.not-animated *{
+      animation: none !important;
+      animation-play-state: paused !important;
+    }
     div#card svg{
       width: 100%;
       height: 100%;
@@ -63,6 +67,7 @@ export default class ArweaveViewer extends HTMLElement {
       'aspect',
       'style',
       'debug',
+      'animate',
       // CONTENT
       'src',
       'source',
@@ -140,7 +145,7 @@ export default class ArweaveViewer extends HTMLElement {
     if (this.hue && !this.theme) {
       const newTheme = this.compileThemeFromHue(this.hue)
       this.hueTheme = newTheme;
-      console.warn('::VIEWER newTheme', newTheme, this.hueTheme)
+      this.debug &&  console.warn('::VIEWER newTheme', newTheme, this.hueTheme)
     }
     if (this.theme || this.hueTheme) {
       const theme = this.theme || this.hueTheme;
@@ -299,8 +304,22 @@ export default class ArweaveViewer extends HTMLElement {
           this.handleExtend();
         }
         break;
+      case 'animate':
+        if (this.debug) {
+          console.log('animate attribute changed')
+        }
+        const value = this.animate || ""
+        if (!this.$card) {
+          break
+        }
+        if (value === 'yes' || value === true || value === 'true') {
+          this.$card.classList.remove('not-animated')
+        }
+        if (value === 'no' || value === false || value === 'false') {
+          this.$card.classList.add('not-animated')
+        }
+        break;
       case 'debug':
-        // console.log('DEBUG showing new value', this.debug, typeof this.debug)
         if (this.debug) {
           console.log('DEBUG is now set')
           this.$showDebugInfo = true;
@@ -822,6 +841,23 @@ export default class ArweaveViewer extends HTMLElement {
       this.setAttribute('style', value);
     } else {
       this.removeAttribute('style');
+    }
+  }
+  /**
+   * ANIMATE
+   */
+  get animate() {
+    if (this.hasAttribute('animate')) {
+      return this.getAttribute('animate') || undefined;
+    }
+    return undefined;
+  }
+
+  set animate(value) {
+    if (value) {
+      this.setAttribute('animate', value);
+    } else {
+      this.removeAttribute('animate');
     }
   }
   /**
