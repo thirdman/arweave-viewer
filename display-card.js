@@ -24,7 +24,7 @@ template.innerHTML = `
     div#card svg{
       width: 100%;
       height: 100%;
-
+      display: block;
     }
     div iframe {
       position: absolute;
@@ -241,8 +241,9 @@ export default class ArweaveViewer extends HTMLElement {
               el.style && el.style.setProperty(`--c-c${index + 1}`, color);
             })
             if (!el.style) {
-              //todo: resolve this
-              console.warn(':VIEWER cannot set color class, no el.style')
+              const styleEl = document.createElement('style');
+              styleEl.setProperty(`--c-c${index + 1}`, color);
+              el.appendChild(styleEl);
             }
           }
         }
