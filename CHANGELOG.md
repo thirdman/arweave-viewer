@@ -1,3 +1,6 @@
+### Version 0.2.12
+- resolve missing style element issue
+
 ### Version 0.2.11
 - Added animate attribute
 
