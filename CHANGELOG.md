@@ -1,3 +1,6 @@
+### Version 0.2.13
+- FIx bug assigning hue colors
+
 ### Version 0.2.12
 - resolve missing style element issue
 
