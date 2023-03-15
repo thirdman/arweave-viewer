@@ -242,7 +242,9 @@ export default class ArweaveViewer extends HTMLElement {
             })
             if (!el.style) {
               const styleEl = document.createElement('style');
-              styleEl.setProperty(`--c-c${index + 1}`, color);
+              themeArray.map((color, index) => {
+                el.style && el.style.setProperty(`--c-c${index + 1}`, color);
+              })
               el.appendChild(styleEl);
             }
           }
