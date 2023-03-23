@@ -245,7 +245,10 @@ export default class ArweaveViewer extends HTMLElement {
               themeArray.map((color, index) => {
                 el.style && el.style.setProperty(`--c-c${index + 1}`, color);
               })
-              el.appendChild(styleEl);
+              if (el.nodeType !== 3) { // ie. a text node
+                el.appendChild(styleEl);
+              }
+              
             }
           }
         }
