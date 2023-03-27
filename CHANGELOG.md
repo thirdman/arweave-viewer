@@ -1,3 +1,6 @@
+### Version 0.2.16
+- debug style append
+
 ### Version 0.2.15
 - enable adding style when first element is text
 
