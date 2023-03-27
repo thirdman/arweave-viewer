@@ -365,15 +365,15 @@ export default class ArweaveViewer extends HTMLElement {
     if (el.nodeType !== 3) { // text node
       el.appendChild(styleEl);
     }
-    if (el.nodeType === 3) {
-      const svgElList = this.$card?.getElementsByTagName("svg");
+    if (el.nodeType === 3 && this.$card) {
+      const svgElList = this.$card.getElementsByTagName("svg");
       const svgEl = svgElList && svgElList[0];
       if (this.debug) {
         console.log('::VIEWER: el appears to be a text node', el)
         console.log('::VIEWER: card', this.$card)
         console.log('svgElList', svgElList, svgEl)
       }
-      if (svgEl) {
+      if (svgEl && styleEl) {
         svgEl.appendChild(styleEl);
       }
     }
