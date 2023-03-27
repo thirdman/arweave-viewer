@@ -1,3 +1,6 @@
+### Version 0.2.15
+- enable adding style when first element is text
+
 ### Version 0.2.14
 - Fix the text node issue
 
