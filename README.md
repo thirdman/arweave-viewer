@@ -18,7 +18,7 @@ This web component takes a source code or arweave hash reference and renders a s
 
 ## Source
 The content of the svg can be set multiple ways
-- source: url of source code. eg `source="https://arweave.net/15khInB7-fbJMLokDdGBFQ4ZVdJYJ2EA8q1yokGfqRA"`
+- source: url of source code. eg `source="https://arweave.net/15khInB7-fbJMLokDdGBFQ4ZVdJYJ2EA8q1yokGfqRA"` This can also be a dataUrl, which is useful for svg based nft.
 - content: innerHtml content for the render iframe. eg `content="<svg></svg>"`
 - hash:arweave hash id. (will load content from url. DEPRECATED. Should use source attribute instead)
 - src: ?
